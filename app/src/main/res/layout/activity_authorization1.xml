@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Authorization1"
+    android:background="#FFFFFF"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+
+        <TextView
+            android:id="@+id/registrationText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Авторизация"
+            android:textAlignment="center"
+            android:textSize="32dp"
+            android:textStyle="normal"
+            android:layout_margin="30dp"/>
+
+        <TextView
+            android:id="@+id/inputEmailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Введите логин: "
+            android:textSize="18dp"
+            android:textStyle="normal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="7dp"
+            />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:background="@drawable/edittext_background"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:inputType="textEmailAddress"
+            android:layout_margin="10dp">
+
+        </EditText>
+        <TextView
+            android:id="@+id/inputEmailText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Введите пароль: "
+            android:textSize="18dp"
+            android:textStyle="normal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="7dp"
+            />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:background="@drawable/edittext_background"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:inputType="textEmailAddress"
+            android:layout_margin="10dp">
+
+        </EditText>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            android:layout_width="200dp"
+            android:layout_height="47dp"
+            android:text="Готово"
+            app:backgroundTint="#B1E996"
+            android:layout_gravity="center"
+            android:background="@drawable/button_corner"
+            app:cornerRadius="15dp"
+            android:textSize="18dp"
+            android:layout_margin="30dp"/>
+
+        <TextView
+            android:id="@+id/toRegistrationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="15dp"
+            android:text="У меня нет аккаунта" />
+
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

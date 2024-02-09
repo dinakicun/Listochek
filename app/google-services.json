@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "962226510208",
+    "project_id": "listochek-59bd3",
+    "storage_bucket": "listochek-59bd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962226510208:android:2859596cffbf7a7b984965",
+        "android_client_info": {
+          "package_name": "com.example.listochek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEgRRIB2Hn8mBHSpW_jYwhaxmHsBSEm7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
