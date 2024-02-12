@@ -39,22 +39,17 @@ public class Authorization1 extends AppCompatActivity {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
-        // Check if email and password are not empty
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(Authorization1.this, "Email/Password cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Authenticate with Firebase, and if email and password are correct, Firebase will return an AuthResult object
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(Authorization1.this, "Authentication Successful.", Toast.LENGTH_SHORT).show();
-                    // Here you can start a new Activity after successful login
                 } else {
-                    // If sign in fails, display a message to the user.
                     Toast.makeText(Authorization1.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }

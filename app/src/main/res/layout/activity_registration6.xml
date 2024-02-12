@@ -34,7 +34,7 @@
             android:id="@+id/inputEmailText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ввеедите ваш рост"
+            android:text="Введите ваш пол"
             android:textSize="20dp"
             android:textStyle="normal"
             android:layout_gravity="center"
