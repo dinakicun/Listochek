@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Listochek"
         tools:targetApi="31">
         <activity
+            android:name=".CalloriesTracker"
+            android:exported="false" />
+        <activity
             android:name=".Authorization3"
             android:exported="false" />
         <activity
@@ -20,9 +23,6 @@
             android:exported="false" />
         <activity
             android:name=".Authorization1"
-            android:exported="false" />
-        <activity
-            android:name=".Registration7"
             android:exported="false" />
         <activity
             android:name=".Registration6"

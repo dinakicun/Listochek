@@ -11,17 +11,22 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.listochek.model.UserModel;
+import com.example.listochek.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Authorization1 extends AppCompatActivity {
 
     private EditText emailEditText;
     private EditText passwordEditText;
-    private FirebaseAuth mAuth; // Firebase authentication reference
+    private FirebaseAuth mAuth;
+    UserModel userModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +39,23 @@ public class Authorization1 extends AppCompatActivity {
 
         findViewById(R.id.button).setOnClickListener(v -> loginUser());
     }
-
+    void getUser(String email) {
+        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    userModel = task.getResult().toObject(UserModel.class);
+                    if (userModel != null) {
+                        Intent intent = new Intent(Authorization1.this, Authorization2.class);
+                        startActivity(intent);
+                    } else if (userModel == null) {
+                        Intent intent = new Intent(Authorization1.this, Registration3.class);
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+    }
     private void loginUser() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
@@ -49,10 +70,13 @@ public class Authorization1 extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(Authorization1.this, "Authentication Successful.", Toast.LENGTH_SHORT).show();
+                    getUser(email);
+
                 } else {
                     Toast.makeText(Authorization1.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
+
 }
