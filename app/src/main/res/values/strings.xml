@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Listochek</string>
+    <string-array name="gender_array">
+        <item>Женский</item>
+        <item>Мужской</item>
+    </string-array>
 </resources>

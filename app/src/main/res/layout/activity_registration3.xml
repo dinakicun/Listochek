@@ -31,7 +31,7 @@
             android:layout_margin="10dp"/>
 
         <TextView
-            android:id="@+id/inputEmailText"
+            android:id="@+id/inputNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Как вас зовут?"
@@ -48,7 +48,7 @@
             android:background="@drawable/edittext_background"
             android:padding="10dp"
             android:layout_gravity="center"
-            android:inputType="textEmailAddress"
+            android:inputType="textPersonName"
             android:layout_margin="10dp">
 
         </EditText>

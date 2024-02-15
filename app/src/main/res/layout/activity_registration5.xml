@@ -31,7 +31,7 @@
             android:layout_margin="10dp"/>
 
         <TextView
-            android:id="@+id/inputEmailText"
+            android:id="@+id/heightTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ввеедите ваш рост"
@@ -42,19 +42,19 @@
             />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/heightText"
             android:layout_width="300dp"
             android:layout_height="55dp"
             android:background="@drawable/edittext_background"
             android:padding="10dp"
             android:layout_gravity="center"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:layout_margin="10dp">
 
         </EditText>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button"
+            android:id="@+id/saveHeight"
             android:layout_width="200dp"
             android:layout_height="47dp"
             android:text="Далее"

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Registration3 extends AppCompatActivity {
+    String name;
 
     EditText usernameInput;
     Button usernameSave;
@@ -19,16 +20,24 @@ public class Registration3 extends AppCompatActivity {
 
         usernameInput = findViewById(R.id.nameText);
         usernameSave = findViewById(R.id.saveName);
+
+
         usernameSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getUsername();
-                Intent intent = new Intent(Registration3.this, Registration4.class);
-                startActivity(intent);
-            }
-    void getUsername(){
+                name = usernameInput.getText().toString();
+                if(name.isEmpty() || name.length()<2){
+                    usernameInput.setError("Введите имя корректно");
+                    return;
+                }
+                else{
+                    Intent intent = new Intent(Registration3.this, Registration4.class);
+                    intent.putExtra("name", name);
+                    startActivity(intent);
+                }
 
-    }
+            }
+
         });
     }
 }

@@ -61,7 +61,8 @@ public class Registration2 extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(Registration2.this, "Регистрация прошла успешно", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(Registration2.this, Registration3.class));
+                                        Intent intent = new Intent(Registration2.this, Registration3.class);
+                                        startActivity(intent);
                                         finish();
                                     } else {
                                         Toast.makeText(Registration2.this, "Что-то пошло не так", Toast.LENGTH_SHORT).show();

@@ -4,10 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Registration6"
-    android:background="#FFFFFF"
-    >
-
+    tools:context=".Registration7">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,30 +28,27 @@
             android:layout_margin="10dp"/>
 
         <TextView
-            android:id="@+id/weightTextView"
+            android:id="@+id/inputEmailText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Введите ваш вес"
+            android:text="Введите ваш пол"
             android:textSize="20dp"
             android:textStyle="normal"
             android:layout_gravity="center"
             android:layout_margin="15dp"
             />
 
-        <EditText
-            android:id="@+id/weightText"
+        <Spinner
+            android:id="@+id/genderSpinner"
             android:layout_width="300dp"
             android:layout_height="55dp"
-            android:background="@drawable/edittext_background"
-            android:padding="10dp"
             android:layout_gravity="center"
-            android:inputType="number"
-            android:layout_margin="10dp">
-
-        </EditText>
+            android:layout_marginTop="10dp"
+            android:entries="@array/gender_array"
+            android:backgroundTint="#FFFFFF"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/saveWeight"
+            android:id="@+id/saveSex"
             android:layout_width="200dp"
             android:layout_height="47dp"
             android:text="Далее"
@@ -66,5 +60,4 @@
             android:layout_margin="30dp"/>
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
