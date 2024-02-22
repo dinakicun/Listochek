@@ -25,6 +25,7 @@ public class Authorization1 extends AppCompatActivity {
 
     private EditText emailEditText;
     private EditText passwordEditText;
+    private TextView toRegistration;
     private FirebaseAuth mAuth;
     UserModel userModel;
 
@@ -36,9 +37,18 @@ public class Authorization1 extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance(); // Initialize Firebase Auth
         emailEditText = findViewById(R.id.editText);
         passwordEditText = findViewById(R.id.editText2);
+        toRegistration = findViewById(R.id.toRegistrationText);
 
         findViewById(R.id.button).setOnClickListener(v -> loginUser());
+        toRegistration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Authorization1.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
     void getUser(String email) {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".Registration7">
-
+    tools:context=".RegistrationFinish">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,21 +28,20 @@
             android:layout_margin="10dp"/>
 
         <TextView
-            android:id="@+id/sexTextView"
+            android:id="@+id/lifeStyleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Выберите ваш пол"
+            android:text="Выберите свой образ жизни"
             android:textSize="20dp"
             android:textStyle="normal"
             android:layout_gravity="center"
             android:layout_margin="15dp"
             />
-
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/femaleSex"
+            android:id="@+id/notActiveLS"
             android:layout_width="280dp"
             android:layout_height="65dp"
-            android:text="Женский"
+            android:text="Сидячий образ жизни"
             android:layout_gravity="center"
             android:backgroundTint="#F8F8F4"
             app:cornerRadius="15dp"
@@ -57,10 +54,10 @@
             />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/maleSex"
+            android:id="@+id/activeLS"
             android:layout_width="280dp"
             android:layout_height="65dp"
-            android:text="Мужской"
+            android:text="Активный образ жизни"
             android:layout_gravity="center"
             android:backgroundTint="#F8F8F4"
             app:cornerRadius="15dp"
@@ -71,16 +68,16 @@
             app:strokeWidth="2dp"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/saveSex"
+            android:id="@+id/saveLifestyle"
             android:layout_width="200dp"
             android:layout_height="47dp"
-            android:text="Готово"
+            android:text="Далее"
             app:backgroundTint="#B1E996"
             android:layout_gravity="center"
             android:background="@drawable/button_corner"
             app:cornerRadius="15dp"
             android:textSize="18dp"
-            android:layout_margin="30dp"/>
+            android:layout_margin="20dp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,16 +9,18 @@ public class UserModel {
     private Integer weight;
     private String sex;
 
+    private Boolean activeLS;
     public UserModel() {
     }
 
-    public UserModel(String email, String name, Integer age, Integer height, Integer weight, String sex) {
+    public UserModel(String email, String name, Integer age, Integer height, Integer weight, String sex, Boolean activeLS) {
         this.email = email;
         this.name = name;
         this.age = age;
         this.height = height;
         this.weight = weight;
         this.sex = sex;
+        this.activeLS = activeLS;
     }
 
     public String getEmail() {
@@ -67,5 +69,13 @@ public class UserModel {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public Boolean getActiveLS() {
+        return activeLS;
+    }
+
+    public void setActiveLS(Boolean activeLS) {
+        this.activeLS = activeLS;
     }
 }

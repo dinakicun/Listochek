@@ -1,0 +1,60 @@
+[debug] [2024-02-18T20:15:34.121Z] ----------------------------------------------------------------------
+[debug] [2024-02-18T20:15:34.122Z] Command:       C:\Users\dinas\DOWNLO~1\firebase-tools-instant-win.exe C:\Users\dinas\.cache\firebase\tools\lib\node_modules\firebase-tools\lib\bin\firebase init
+[debug] [2024-02-18T20:15:34.122Z] CLI Version:   13.3.0
+[debug] [2024-02-18T20:15:34.122Z] Platform:      win32
+[debug] [2024-02-18T20:15:34.123Z] Node Version:  v18.5.0
+[debug] [2024-02-18T20:15:34.123Z] Time:          Sun Feb 18 2024 23:15:34 GMT+0300 (GMT+03:00)
+[debug] [2024-02-18T20:15:34.123Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-02-18T20:15:34.127Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-02-18T20:15:34.128Z] > authorizing via signed-in user (krolchonokk@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\dinas\AndroidStudioProjects\Listochek\app
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-02-18T20:16:30.051Z] > refreshing access token with scopes: []
+[debug] [2024-02-18T20:16:30.052Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-02-18T20:16:30.053Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-02-18T20:16:30.263Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-02-18T20:16:30.263Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-02-18T20:16:30.274Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2024-02-18T20:16:30.840Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2024-02-18T20:16:30.840Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] i  Using project listochek-59bd3 (Listochek) 
+[info] 
+=== Firestore Setup
+[debug] [2024-02-18T20:16:38.882Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/listochek-59bd3/services/firestore.googleapis.com [none]
+[debug] [2024-02-18T20:16:38.882Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/listochek-59bd3/services/firestore.googleapis.com x-goog-quota-user=projects/listochek-59bd3
+[debug] [2024-02-18T20:16:39.982Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/listochek-59bd3/services/firestore.googleapis.com 200
+[debug] [2024-02-18T20:16:39.982Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/listochek-59bd3/services/firestore.googleapis.com [omitted]
+[debug] [2024-02-18T20:16:39.982Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/listochek-59bd3/databases/(default) [none]
+[debug] [2024-02-18T20:16:41.073Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/listochek-59bd3/databases/(default) 200
+[debug] [2024-02-18T20:16:41.073Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/listochek-59bd3/databases/(default) {"name":"projects/listochek-59bd3/databases/(default)","uid":"04427cf4-eaa2-4091-9041-dd9bf8cdd42d","createTime":"2024-02-09T22:31:13.473351Z","updateTime":"2024-02-09T22:31:13.473351Z","locationId":"nam5","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2024-02-18T19:16:42.110633Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"s","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","etag":"IK3Ym77atYQDMMucn/2qn4QD"}
+[debug] [2024-02-18T20:16:41.074Z] database_type: FIRESTORE_NATIVE
+[debug] [2024-02-18T20:16:41.074Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-02-18T20:16:41.074Z] > authorizing via signed-in user (krolchonokk@gmail.com)
+[debug] [2024-02-18T20:16:41.074Z] [iam] checking project listochek-59bd3 for permissions ["firebase.projects.get"]
+[debug] [2024-02-18T20:16:41.075Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/listochek-59bd3:testIamPermissions [none]
+[debug] [2024-02-18T20:16:41.075Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/listochek-59bd3:testIamPermissions x-goog-quota-user=projects/listochek-59bd3
+[debug] [2024-02-18T20:16:41.075Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/listochek-59bd3:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-02-18T20:16:41.988Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/listochek-59bd3:testIamPermissions 200
+[debug] [2024-02-18T20:16:41.989Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/listochek-59bd3:testIamPermissions {"permissions":["firebase.projects.get"]}
+[info] 
+[info] Firestore Security Rules allow you to define how and when to allow
+[info] requests. You can keep these rules in your project directory
+[info] and publish them with firebase deploy.
+[info] 

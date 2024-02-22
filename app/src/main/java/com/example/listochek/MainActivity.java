@@ -2,6 +2,7 @@ package com.example.listochek;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText emailET;
     private Button emailBtn;
     private FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,15 +40,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = emailET.getText().toString();
-                if(!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     Intent intent = new Intent(MainActivity.this, Registration2.class);
                     intent.putExtra("email", email);
                     startActivity(intent);
-                }
-                else if(email.isEmpty()){
+                } else if (email.isEmpty()) {
                     emailET.setError("Пустые значения некорректны");
-                }
-                else{
+                } else {
                     emailET.setError("Введите корректный вид почты");
                 }
             }

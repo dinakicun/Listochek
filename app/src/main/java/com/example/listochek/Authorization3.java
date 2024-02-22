@@ -54,7 +54,7 @@ public class Authorization3 extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Intent intent = new Intent(Authorization3.this, CalloriesTracker.class);
+                    Intent intent = new Intent(Authorization3.this, AuthorizationFinish.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
 
