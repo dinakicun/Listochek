@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.listochek.model.CharacteristicsModel;
 import com.example.listochek.model.UserModel;
 import com.example.listochek.utils.FirebaseUtil;
+import com.example.listochek.utils.NutritionCalculator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -29,6 +32,7 @@ public class RegistrationFinish extends AppCompatActivity {
     Button notActive;
     Button active;
     Button save;
+    CharacteristicsModel nutrition;
     boolean active_lifestyle;
     private boolean isLifestyleSelected = false;
 
@@ -42,6 +46,7 @@ public class RegistrationFinish extends AppCompatActivity {
         height = getIntent().getExtras().getString("height");
         weight = getIntent().getExtras().getString("weight");
         active_lifestyle = getIntent().getExtras().getBoolean("active_lifestyle");
+        sex = getIntent().getExtras().getString("sex");
         email = FirebaseUtil.currentUserEmail();
 
         notActive = findViewById(R.id.notActiveLS);
@@ -84,21 +89,31 @@ public class RegistrationFinish extends AppCompatActivity {
             Integer intAge = Integer.parseInt(age);
             Integer intHeight = Integer.parseInt(height);
             Integer intWeight = Integer.parseInt(weight);
+            String userId = FirebaseUtil.currentUserId();
             if (userModel == null) {
                 userModel = new UserModel(email, name, intAge, intHeight, intWeight, sex, active_lifestyle);
-            }
+                nutrition = NutritionCalculator.calculateNutrition(sex, intAge, intHeight, intWeight, active_lifestyle, userId);
 
+            }
             FirebaseUtil.currentUserDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
+                        saveNutritionDetails(nutrition);
                         Intent intent = new Intent(RegistrationFinish.this,CalloriesTracker.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                         startActivity(intent);
                     }
                 }
             });
-
+        }
+        void saveNutritionDetails(CharacteristicsModel nutrition) {
+            FirebaseUtil.currentCharacteristicsDetails()
+                    .set(nutrition)
+                    .addOnSuccessListener(aVoid -> Toast.makeText(RegistrationFinish.this, "Nutrition details saved successfully.", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(RegistrationFinish.this, "Error saving nutrition details.", Toast.LENGTH_SHORT).show();
+                    });
         }
         void getUser(){
             FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

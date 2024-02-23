@@ -11,9 +11,13 @@ public class FirebaseUtil {
         return FirebaseAuth.getInstance().getUid();
     }
     public static DocumentReference currentUserDetails(){
+
         return FirebaseFirestore.getInstance().collection("users").document(currentUserId());
     }
+    public static DocumentReference currentCharacteristicsDetails(){
 
+        return FirebaseFirestore.getInstance().collection("characteristics").document(currentUserId());
+    }
     public static String currentUserEmail() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -22,4 +26,5 @@ public class FirebaseUtil {
             return ""; 
         }
     }
+
 }
