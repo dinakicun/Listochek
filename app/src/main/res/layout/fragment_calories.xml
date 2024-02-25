@@ -1,13 +1,443 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CaloriesFragment">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Calories page" />
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/mainLL"
+            >
+
+            <TextView
+                android:id="@+id/todayView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Сегодня"
+                android:textSize="35sp"
+                android:layout_marginStart="10dp"
+                />
+
+            <TextView
+                android:id="@+id/goalView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="5dp"
+                android:text="Ваша цель: ____ калорий "
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/drop_background"
+                android:id="@+id/trackerLL">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/firstStrokeLL"
+                    android:layout_marginTop="70dp"
+                    android:layout_marginBottom="20dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:id="@+id/leftCaloriesLL"
+                        >
+
+                        <TextView
+                            android:id="@+id/leftNumberOfCaloriesText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="____"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                        />
+
+                        <TextView
+                            android:id="@+id/leftCaloriesText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Осталось"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/placeholder"
+                        android:orientation="vertical"
+                        android:layout_width="100dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:id="@+id/finishedCaloriesLL"
+                        >
+
+                        <TextView
+                            android:id="@+id/finishedNumberOfCaloriesText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="____"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/fineshedCaloriesText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Съедено"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/secondStrokeLL">
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:id="@+id/leftCarbohydratesLL"
+                        >
+
+                        <TextView
+                            android:id="@+id/leftNumberOfCarbohydratesText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Углеводы"
+                            android:layout_gravity="center"
+                            android:textSize="14sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/leftCarbohydratesText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="___/___"
+                            android:layout_gravity="center"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:id="@+id/leftProteinsLL"
+                    >
+
+                    <TextView
+                        android:id="@+id/leftNumberOfProteinsText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Белки"
+                        android:layout_gravity="center"
+                        android:textSize="14sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/leftProteinsText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="___/___"
+                        android:layout_gravity="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        />
+
+                </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:id="@+id/leftFatsLL"
+                        >
+
+                        <TextView
+                            android:id="@+id/leftNumberOfFatsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Жиры"
+                            android:layout_gravity="center"
+                            android:textSize="14sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/leftFatsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="___/___"
+                            android:layout_gravity="center"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addBreakfastLayout"
+                    android:background="@drawable/edittext_background"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="center"
+                    >
+
+                    <ImageView
+                        android:id="@+id/breakfastImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:srcCompat="@drawable/breakfast_image"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:textSize="17sp"
+                        android:text="Завтрак"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/breakfastImageView"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </TextView>
+
+                    <ImageButton
+                        android:id="@+id/addBreakfastBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/breakfast_add_button"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="20dp">
+
+                    </ImageButton>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addLunchLayout"
+                    android:background="@drawable/edittext_background"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="center"
+                    >
+
+                    <ImageView
+                        android:id="@+id/lunchImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:srcCompat="@drawable/lunch_image"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:textSize="17sp"
+                        android:text="Обед"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/lunchImageView"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </TextView>
+
+                    <ImageButton
+                        android:id="@+id/addLunchBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/breakfast_add_button"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="20dp">
+
+                    </ImageButton>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addDinnerLayout"
+                    android:background="@drawable/edittext_background"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="center"
+                    >
+
+                    <ImageView
+                        android:id="@+id/dinnerImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:srcCompat="@drawable/dinner_image"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:textSize="17sp"
+                        android:text="Ужин"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/dinnerImageView"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </TextView>
+
+                    <ImageButton
+                        android:id="@+id/addDinnerBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/breakfast_add_button"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="20dp">
+
+                    </ImageButton>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addSnackLayout"
+                    android:background="@drawable/edittext_background"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="100dp"
+                    >
+
+                    <ImageView
+                        android:id="@+id/snackImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:srcCompat="@drawable/snack_image"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:textSize="17sp"
+                        android:text="Перекус"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/snackImageView"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </TextView>
+
+                    <ImageButton
+                        android:id="@+id/addSnackBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/breakfast_add_button"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="20dp">
+
+                    </ImageButton>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+            </LinearLayout>
+    </ScrollView>
 </FrameLayout>
