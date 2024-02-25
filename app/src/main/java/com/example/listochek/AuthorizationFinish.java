@@ -86,7 +86,7 @@ public class AuthorizationFinish extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     updateNutritionDetails(newNutrition);
-                    Intent intent = new Intent(AuthorizationFinish.this, CalloriesTracker.class);
+                    Intent intent = new Intent(AuthorizationFinish.this, HomePage.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
 

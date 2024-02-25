@@ -100,7 +100,7 @@ public class RegistrationFinish extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
                         saveNutritionDetails(nutrition);
-                        Intent intent = new Intent(RegistrationFinish.this,CalloriesTracker.class);
+                        Intent intent = new Intent(RegistrationFinish.this,HomePage.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                         startActivity(intent);
                     }
