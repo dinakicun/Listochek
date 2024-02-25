@@ -54,21 +54,14 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="15dp"
-            >
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/user_image"
-                android:scaleType="fitXY" />
+            android:layout_marginEnd="15dp">
 
             <ImageButton
                 android:id="@+id/main_user_btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:color/transparent" />
+                android:src="@drawable/user_icon" />
 
         </FrameLayout>
 

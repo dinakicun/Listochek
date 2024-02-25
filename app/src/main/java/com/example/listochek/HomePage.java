@@ -4,11 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.listochek.utils.FirebaseUtil;
+import com.example.listochek.utils.NutritionViewModel;
+import com.example.listochek.utils.WaterViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -22,6 +27,7 @@ public class HomePage extends AppCompatActivity {
     CaloriesFragment caloriesFragment;
     String userId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +40,14 @@ public class HomePage extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         userButton= findViewById(R.id.main_user_btn);
         userId = FirebaseUtil.currentUserId();
+
+        userButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePage.this, PrivateAccount.class);
+                startActivity(intent);
+            }
+        });
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

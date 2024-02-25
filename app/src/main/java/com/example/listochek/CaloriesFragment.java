@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.listochek.utils.NutritionViewModel;
+
 
 public class CaloriesFragment extends Fragment {
 
