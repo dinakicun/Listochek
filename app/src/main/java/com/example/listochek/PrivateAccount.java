@@ -1,7 +1,11 @@
 package com.example.listochek;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.listochek.model.CharacteristicsModel;
@@ -12,7 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 public class PrivateAccount extends AppCompatActivity {
     private TextView nameText, ageText, weightText, heightText, caloriesText;
-
+    private LinearLayout changeData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +27,21 @@ public class PrivateAccount extends AppCompatActivity {
         weightText = findViewById(R.id.weightText);
         heightText = findViewById(R.id.heightText);
         caloriesText = findViewById(R.id.caloriesText);
+        changeData = findViewById(R.id.changeDataLL);
         loadUserData();
+
+        changeData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PrivateAccount.this, ChangePersonalData.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
+        });
     }
+
+
     private void loadUserData() {
         String userId = FirebaseUtil.currentUserId();
 

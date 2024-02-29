@@ -68,19 +68,17 @@ public class HomePage extends AppCompatActivity {
                     return true;
                 }
                 else if(item.getItemId() == R.id.menu_calories){
-                    NutritionViewModel viewModel = new ViewModelProvider(HomePage.this).get(NutritionViewModel.class);
+                    NutritionViewModel nutritionViewModel = new ViewModelProvider(HomePage.this).get(NutritionViewModel.class);
 
-                    viewModel.loadCharacteristics(userId);
+                    nutritionViewModel.loadCharacteristics(userId);
 
-                    viewModel.getCalories().observe(HomePage.this, calories -> {
+                    nutritionViewModel.getCalories().observe(HomePage.this, calories -> {
                         if (calories != null) {
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.main_frame_layout, new CaloriesFragment())
                                     .commit();
                         }
                     });
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, caloriesFragment).commit();
                     return true;
                 }
                 else {

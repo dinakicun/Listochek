@@ -32,17 +32,17 @@ public class CaloriesFragment extends Fragment {
 
         viewModel.getCarbohydrates().observe(getViewLifecycleOwner(), carbs -> {
             TextView leftCarbohydratesText = view.findViewById(R.id.leftCarbohydratesText);
-            leftCarbohydratesText.setText("___/" + carbs );
+            leftCarbohydratesText.setText("0/" + carbs );
         });
 
         viewModel.getProtein().observe(getViewLifecycleOwner(), protein -> {
             TextView leftProteinsText = view.findViewById(R.id.leftProteinsText);
-            leftProteinsText.setText("___/" + protein);
+            leftProteinsText.setText("0/" + protein);
         });
 
         viewModel.getFats().observe(getViewLifecycleOwner(), fats -> {
             TextView leftFatsText = view.findViewById(R.id.leftFatsText);
-            leftFatsText.setText("___/" + fats);
+            leftFatsText.setText("0/" + fats);
         });
 
         return view;
