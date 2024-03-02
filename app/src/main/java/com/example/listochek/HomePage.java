@@ -6,16 +6,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.listochek.utils.FirebaseUtil;
 import com.example.listochek.utils.NutritionViewModel;
-import com.example.listochek.utils.WaterViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class HomePage extends AppCompatActivity {
 
@@ -53,14 +53,10 @@ public class HomePage extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId() == R.id.menu_water){
-                    WaterViewModel viewModel = new ViewModelProvider(HomePage.this).get(WaterViewModel.class);
-                    viewModel.loadWaterGoal(userId);
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.main_frame_layout, new WaterFragment())
+                                    .commit();
 
-                    viewModel.getWaterGoal().observe(HomePage.this, waterGoalLiters -> {
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.main_frame_layout, new WaterFragment())
-                                .commit();
-                    });
                     return true;
                 }
                 else if (item.getItemId() == R.id.menu_home){
@@ -88,5 +84,17 @@ public class HomePage extends AppCompatActivity {
         });
         bottomNavigationView.setSelectedItemId(R.id.menu_home);
 
+        getFCMToken();
+
+    }
+
+    void getFCMToken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                String token = task.getResult();
+                Log.i("My token", token);
+
+            }
+        });
     }
 }

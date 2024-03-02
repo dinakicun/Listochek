@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Listochek"
         tools:targetApi="31">
         <activity
+            android:name=".AddReminder"
+            android:exported="false" />
+        <activity
             android:name=".ChangePersonalData"
             android:exported="false" />
         <activity
@@ -63,6 +66,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".FCMNotificationsService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
