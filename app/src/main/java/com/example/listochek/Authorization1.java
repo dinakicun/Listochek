@@ -71,7 +71,7 @@ public class Authorization1 extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(Authorization1.this, "Email/Password cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Authorization1.this, "Поля не могут быть пустыми", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -79,11 +79,11 @@ public class Authorization1 extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(Authorization1.this, "Authentication Successful.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Authorization1.this, "Авторизация успешна", Toast.LENGTH_SHORT).show();
                     getUser(email);
 
                 } else {
-                    Toast.makeText(Authorization1.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(Authorization1.this, "Ошибка авторизации: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });

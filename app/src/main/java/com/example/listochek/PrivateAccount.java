@@ -16,7 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 public class PrivateAccount extends AppCompatActivity {
     private TextView nameText, ageText, weightText, heightText, caloriesText;
-    private LinearLayout changeData;
+    private LinearLayout changeData, exit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +28,22 @@ public class PrivateAccount extends AppCompatActivity {
         heightText = findViewById(R.id.heightText);
         caloriesText = findViewById(R.id.caloriesText);
         changeData = findViewById(R.id.changeDataLL);
+        exit = findViewById(R.id.exitLL);
         loadUserData();
 
         changeData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PrivateAccount.this, ChangePersonalData.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
+        });
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PrivateAccount.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }

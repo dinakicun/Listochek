@@ -133,10 +133,10 @@ public class WaterFragment extends Fragment {
                     transaction.set(dateDocRef, new WaterIntakeModel(new Date(), newVolume));
                     return null;
                 }).addOnSuccessListener(aVoid -> {
-                    Log.d("WaterFragment", "Transaction success!");
+                    Log.d("WaterFragment", "Получилось!");
                     viewModel.loadDailyWaterIntake(userId);
                 })
-                .addOnFailureListener(e -> Log.w("WaterFragment", "Transaction failure.", e));
+                .addOnFailureListener(e -> Log.w("WaterFragment", "Не получилось.", e));
     }
 
 }

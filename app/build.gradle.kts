@@ -46,6 +46,7 @@ dependencies {
 
 // Add the Firebase SDK for Firebase Authentication
     implementation("com.google.firebase:firebase-auth:19.2.0")
+    implementation ("com.firebaseui:firebase-ui-firestore:8.0.2")
 
 
 

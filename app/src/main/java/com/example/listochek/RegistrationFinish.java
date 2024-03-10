@@ -110,9 +110,9 @@ public class RegistrationFinish extends AppCompatActivity {
         void saveNutritionDetails(CharacteristicsModel nutrition) {
             FirebaseUtil.currentCharacteristicsDetails()
                     .set(nutrition)
-                    .addOnSuccessListener(aVoid -> Toast.makeText(RegistrationFinish.this, "Nutrition details saved successfully.", Toast.LENGTH_SHORT).show())
+                    .addOnSuccessListener(aVoid -> Toast.makeText(RegistrationFinish.this, "Данные сохранены", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> {
-                        Toast.makeText(RegistrationFinish.this, "Error saving nutrition details.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegistrationFinish.this, "Ошибка сбора данных", Toast.LENGTH_SHORT).show();
                     });
         }
         void getUser(){

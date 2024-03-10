@@ -126,7 +126,7 @@ public class ChangePersonalData extends AppCompatActivity {
     void updateNutritionDetails(CharacteristicsModel nutrition) {
         FirebaseUtil.currentCharacteristicsDetails()
                 .set(nutrition)
-                .addOnSuccessListener(aVoid -> Toast.makeText(ChangePersonalData.this, "Nutrition details updated successfully.", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(ChangePersonalData.this, "Error updating nutrition details.", Toast.LENGTH_SHORT).show());
+                .addOnSuccessListener(aVoid -> Toast.makeText(ChangePersonalData.this, "Данные успешно обновлены", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(ChangePersonalData.this, "Ошибка обновления данных", Toast.LENGTH_SHORT).show());
     }
 }

@@ -60,7 +60,7 @@ public class Authorization3 extends AppCompatActivity {
 
                 }
                 else{
-                    Toast.makeText(Authorization3.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(Authorization3.this, "Ошибка авторизации: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });

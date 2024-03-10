@@ -82,7 +82,7 @@ public class HomePage extends AppCompatActivity {
                 }
             }
         });
-        bottomNavigationView.setSelectedItemId(R.id.menu_home);
+        bottomNavigationView.setSelectedItemId(R.id.menu_calories);
 
         getFCMToken();
 

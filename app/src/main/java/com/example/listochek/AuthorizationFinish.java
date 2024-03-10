@@ -92,7 +92,7 @@ public class AuthorizationFinish extends AppCompatActivity {
 
                 }
                 else{
-                    Toast.makeText(AuthorizationFinish.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AuthorizationFinish.this, "Ошибка авторизации: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
