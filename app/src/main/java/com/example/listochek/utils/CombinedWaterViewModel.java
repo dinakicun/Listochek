@@ -32,7 +32,7 @@ public class CombinedWaterViewModel extends ViewModel {
                 if (document.exists()) {
                     Double goal = document.getDouble("water");
                     if (goal != null) {
-                        waterGoal.setValue(goal / 1000); // Assuming 'water' is in ml and you want it in liters
+                        waterGoal.setValue(goal / 1000);
                     }
                 }
             }
@@ -67,6 +67,35 @@ public class CombinedWaterViewModel extends ViewModel {
                 .addOnFailureListener(e -> {
                     currentVolume.setValue(0.0);
                     glassesOfWater.setValue(0);
+                    remainingWaterGoal.setValue(waterGoal.getValue());
+                });
+    }
+
+    public void updateWaterIntakeData(String userId)
+    {
+        String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        db.collection("waterIntake").document(userId).collection("Intakes").document(todayDate)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Double volume = documentSnapshot.getDouble("volume");
+                        if (volume != null) {
+                            currentVolume.setValue(volume);
+                            if (waterGoal.getValue() != null) {
+                                double goal = waterGoal.getValue();
+                                remainingWaterGoal.setValue(Math.max(0, goal - volume));
+                            }
+                        } else {
+                            currentVolume.setValue(0.0);
+                            remainingWaterGoal.setValue(waterGoal.getValue());
+                        }
+                    } else {
+                        currentVolume.setValue(0.0);
+                        remainingWaterGoal.setValue(waterGoal.getValue());
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    currentVolume.setValue(0.0);
                     remainingWaterGoal.setValue(waterGoal.getValue());
                 });
     }

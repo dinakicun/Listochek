@@ -134,7 +134,7 @@ public class WaterFragment extends Fragment {
                     return null;
                 }).addOnSuccessListener(aVoid -> {
                     Log.d("WaterFragment", "Получилось!");
-                    viewModel.loadDailyWaterIntake(userId);
+                    viewModel.updateWaterIntakeData(userId);
                 })
                 .addOnFailureListener(e -> Log.w("WaterFragment", "Не получилось.", e));
     }
