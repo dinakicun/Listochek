@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.core.view.GestureDetectorCompat;
 
 public class Registration2 extends AppCompatActivity {
 
@@ -25,6 +28,8 @@ public class Registration2 extends AppCompatActivity {
     private EditText secPass;
     private Button signUp;
     private FirebaseAuth mAuth;
+    private GestureDetectorCompat gestureDetectorCompat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +51,29 @@ public class Registration2 extends AppCompatActivity {
 
             }
         });
+        gestureDetectorCompat = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                float diffX = e2.getX() - e1.getX();
+                float diffY = e2.getY() - e1.getY();
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    // Горизонтальный свайп
+                    if (diffX > 0) {
+                        // Свайп вправо
+                        Intent intent = new Intent(Registration2.this, MainActivity.class);
+                        startActivity(intent);
+                        return true;
+                    }
+                }
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+        });
 
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetectorCompat.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
     private void createUser(){
         String email = userEmail;

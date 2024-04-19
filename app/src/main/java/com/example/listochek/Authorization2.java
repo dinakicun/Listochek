@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,12 +19,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import androidx.core.view.GestureDetectorCompat;
+
 public class Authorization2 extends AppCompatActivity {
 
     TextView weightView;
     EditText weigthInput;
     Button weightButton;
     UserModel userModel;
+    private GestureDetectorCompat gestureDetectorCompat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +45,28 @@ public class Authorization2 extends AppCompatActivity {
             }
 
         });
+        gestureDetectorCompat = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                float diffX = e2.getX() - e1.getX();
+                float diffY = e2.getY() - e1.getY();
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    // Горизонтальный свайп
+                    if (diffX > 0) {
+                        // Свайп вправо
+                        Intent intent = new Intent(Authorization2.this, Authorization1.class);
+                        startActivity(intent);
+                        return true;
+                    }
+                }
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+        });
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetectorCompat.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
     void setUserWeight(){
        String weightString = weigthInput.getText().toString();

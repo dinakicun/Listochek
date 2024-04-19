@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.text.TextRunShaper;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,11 +20,15 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import androidx.core.view.GestureDetectorCompat;
+
 public class ChangePersonalData extends AppCompatActivity {
     TextView name, height, weight, age;
     Button sex, save;
     String userId;
     Boolean activity;
+    private GestureDetectorCompat gestureDetectorCompat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +89,30 @@ public class ChangePersonalData extends AppCompatActivity {
             } else {
             }
         });
+        gestureDetectorCompat = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                float diffX = e2.getX() - e1.getX();
+                float diffY = e2.getY() - e1.getY();
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    // Горизонтальный свайп
+                    if (diffX > 0) {
+                        // Свайп вправо
+                        Intent intent = new Intent(ChangePersonalData.this, PrivateAccount.class);
+                        startActivity(intent);
+                        return true;
+                    }
+                }
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+        });
 
     }
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetectorCompat.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
     private void setUserData(String userId) {
         String updatedName = name.getText().toString();
         String updatedAge = age.getText().toString();

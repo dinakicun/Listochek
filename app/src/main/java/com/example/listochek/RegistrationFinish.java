@@ -8,6 +8,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,7 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
-
+import androidx.core.view.GestureDetectorCompat;
 public class RegistrationFinish extends AppCompatActivity {
     String age;
     String name;
@@ -35,6 +37,8 @@ public class RegistrationFinish extends AppCompatActivity {
     CharacteristicsModel nutrition;
     boolean active_lifestyle;
     private boolean isLifestyleSelected = false;
+    private GestureDetectorCompat gestureDetectorCompat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +87,8 @@ public class RegistrationFinish extends AppCompatActivity {
                 }
             }
         });
-    }
 
+    }
         void setUser(){
             Integer intAge = Integer.parseInt(age);
             Integer intHeight = Integer.parseInt(height);

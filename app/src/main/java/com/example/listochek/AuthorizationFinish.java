@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,6 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import androidx.core.view.GestureDetectorCompat;
+
 public class AuthorizationFinish extends AppCompatActivity {
     UserModel userModel;
     Button notActive;
@@ -28,6 +32,8 @@ public class AuthorizationFinish extends AppCompatActivity {
     boolean active_lifestyle;
     private boolean isLifestyleSelected = false;
     CharacteristicsModel newNutrition;
+    private GestureDetectorCompat gestureDetectorCompat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +74,29 @@ public class AuthorizationFinish extends AppCompatActivity {
                 }
             }
         });
+
+        gestureDetectorCompat = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                float diffX = e2.getX() - e1.getX();
+                float diffY = e2.getY() - e1.getY();
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    // Горизонтальный свайп
+                    if (diffX > 0) {
+                        // Свайп вправо
+                        Intent intent = new Intent(AuthorizationFinish.this, Authorization3.class);
+                        startActivity(intent);
+                        return true;
+                    }
+                }
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+        });
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetectorCompat.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
     void setUserActivity(){
         String userId = FirebaseUtil.currentUserId();
