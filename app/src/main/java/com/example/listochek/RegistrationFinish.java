@@ -3,7 +3,9 @@ package com.example.listochek;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -104,6 +106,10 @@ public class RegistrationFinish extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
                         saveNutritionDetails(nutrition);
+                        SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("user_id", userId);
+                        editor.apply();
                         Intent intent = new Intent(RegistrationFinish.this,HomePage.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                         startActivity(intent);
@@ -128,6 +134,7 @@ public class RegistrationFinish extends AppCompatActivity {
                         if(userModel==null){
                             setUser();
                         }
+
                     }
                 }
             });

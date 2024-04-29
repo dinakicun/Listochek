@@ -3,6 +3,8 @@ package com.example.listochek;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -32,6 +34,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         emailET = findViewById(R.id.emailText);
+
+        SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        String userId = sharedPref.getString("user_id", null);
+        if (userId != null) {
+            Intent intent = new Intent(this, HomePage.class);
+            startActivity(intent);
+            finish();
+        }
 
 
         Button button = findViewById(R.id.emailAddButton);

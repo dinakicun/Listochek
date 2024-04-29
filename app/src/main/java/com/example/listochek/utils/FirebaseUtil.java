@@ -15,6 +15,7 @@ public class FirebaseUtil {
 
         return FirebaseFirestore.getInstance().collection("users").document(currentUserId());
     }
+
     public static DocumentReference currentCharacteristicsDetails(){
 
         return FirebaseFirestore.getInstance().collection("characteristics").document(currentUserId());
