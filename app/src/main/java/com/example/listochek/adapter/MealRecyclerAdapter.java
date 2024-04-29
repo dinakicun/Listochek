@@ -29,19 +29,19 @@ public class MealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel, Mea
         if (model.getName() != null) {
             holder.mealNameText.setText(model.getName());
         } else {
-            holder.mealNameText.setText(""); // или какое-то значение по умолчанию
+            holder.mealNameText.setText("");
         }
 
         if (model.getWeight() != null) {
             holder.mealWeightText.setText(String.valueOf(model.getWeight()) + " г");
         } else {
-            holder.mealWeightText.setText(""); // или какое-то значение по умолчанию
+            holder.mealWeightText.setText("");
         }
 
         if (model.getCalories() != null) {
             holder.mealCaloriesText.setText(String.valueOf(model.getCalories()) + " ккал");
         } else {
-            holder.mealCaloriesText.setText(""); // или какое-то значение по умолчанию
+            holder.mealCaloriesText.setText("");
         }
     }
 

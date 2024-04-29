@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.listochek.model.MealModel;
+import com.example.listochek.utils.FirebaseUtil;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddDish extends AppCompatActivity {
@@ -23,6 +24,8 @@ public class AddDish extends AppCompatActivity {
         setContentView(R.layout.activity_add_dish);
 
         db = FirebaseFirestore.getInstance();
+
+
 
         nameText = findViewById(R.id.nameText);
         weightText = findViewById(R.id.weightText);
@@ -65,9 +68,10 @@ public class AddDish extends AppCompatActivity {
             return;
         }
 
-        MealModel meal = new MealModel(calories, fats, protein, carbohydrates, name, weight);
+        String userId = FirebaseUtil.currentUserId();
 
-        db.collection("meal").add(meal)
+        MealModel meal = new MealModel(calories, fats, protein, carbohydrates, name, weight);
+        db.collection("meal").document("usersMeal").collection(userId).add(meal)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Блюдо успешно добавлено!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(AddDish.this, CaloriesFragment.class);
@@ -78,4 +82,16 @@ public class AddDish extends AppCompatActivity {
                     Toast.makeText(this, "Ошибка при добавлении блюда: " + e.toString(), Toast.LENGTH_SHORT).show();
                 });
     }
+
+//        db.collection("meal").add(meal)
+//                .addOnSuccessListener(documentReference -> {
+//                    Toast.makeText(this, "Блюдо успешно добавлено!", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(AddDish.this, CaloriesFragment.class);
+//                    startActivity(intent);
+//                    finish();
+//                })
+//                .addOnFailureListener(e -> {
+//                    Toast.makeText(this, "Ошибка при добавлении блюда: " + e.toString(), Toast.LENGTH_SHORT).show();
+//                });
+//    }
 }
