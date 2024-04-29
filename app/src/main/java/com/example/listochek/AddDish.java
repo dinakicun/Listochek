@@ -83,15 +83,4 @@ public class AddDish extends AppCompatActivity {
                 });
     }
 
-//        db.collection("meal").add(meal)
-//                .addOnSuccessListener(documentReference -> {
-//                    Toast.makeText(this, "Блюдо успешно добавлено!", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(AddDish.this, CaloriesFragment.class);
-//                    startActivity(intent);
-//                    finish();
-//                })
-//                .addOnFailureListener(e -> {
-//                    Toast.makeText(this, "Ошибка при добавлении блюда: " + e.toString(), Toast.LENGTH_SHORT).show();
-//                });
-//    }
 }
