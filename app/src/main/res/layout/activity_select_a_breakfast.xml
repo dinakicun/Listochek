@@ -76,7 +76,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
             android:id="@+id/selectedDishesLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="365dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginBottom="20dp"
@@ -93,73 +93,7 @@
                 android:layout_marginBottom="15dp"
              />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/dishesLayout"
-                android:layout_width="360dp"
-                android:background="@drawable/edittext_background"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:paddingLeft="15dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                >
 
-                <LinearLayout
-                    android:id="@+id/selectedDish"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/addDishLayout"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
-                   <TextView
-                       android:id="@+id/nameOfDish"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       tools:text = "Название"
-                       android:textSize="15dp">
-                   </TextView>
-                   <TextView
-                       android:id="@+id/weightOfDish"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       tools:text = "__ г"
-                       android:textSize="14dp">
-                   </TextView>
-               </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/addDishLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    >
-                   <TextView
-                       android:id="@+id/caloriesOfDish"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       tools:text = "__ ккал"
-                       android:textSize="15dp"
-                       android:layout_marginRight="20dp">
-                   </TextView>
-
-                   <ImageButton
-                       android:id="@+id/deleteBreakfastBtn"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:background="?attr/selectableItemBackgroundBorderless"
-                       android:src="@drawable/delete_button"
-                       >
-                   </ImageButton>
-               </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <LinearLayout

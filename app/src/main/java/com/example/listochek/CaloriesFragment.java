@@ -59,30 +59,34 @@ public class CaloriesFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SelectABreakfast.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("type", "Breakfast");
                 startActivity(intent);
             }
         });
         lunch_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SelectALunch.class);
+                Intent intent = new Intent(getActivity(), SelectABreakfast.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("type", "Lunch");
                 startActivity(intent);
             }
         });
         dinner_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SelectADinner.class);
+                Intent intent = new Intent(getActivity(), SelectABreakfast.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("type", "Dinner");
                 startActivity(intent);
             }
         });
         snack_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SelectASnack.class);
+                Intent intent = new Intent(getActivity(), SelectABreakfast.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("type", "Snack");
                 startActivity(intent);
             }
         });

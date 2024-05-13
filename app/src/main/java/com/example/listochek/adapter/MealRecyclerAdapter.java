@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.util.Log;
@@ -18,7 +17,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 public class MealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel, MealRecyclerAdapter.MealViewHolder> {
-    Context context;
+    private Context context;
+    private OnMealListener listener;
+
     public MealRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MealModel> options, Context context) {
         super(options);
         this.context = context;
@@ -33,52 +34,53 @@ public class MealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel, Mea
         }
 
         if (model.getWeight() != null) {
-            holder.mealWeightText.setText(String.valueOf(model.getWeight()) + " г");
+            holder.mealWeightText.setText(model.getWeight() + " г");
         } else {
-            holder.mealWeightText.setText(""); //ааа
+            holder.mealWeightText.setText("");
         }
 
         if (model.getCalories() != null) {
-            holder.mealCaloriesText.setText(String.valueOf(model.getCalories()) + " ккал");
+            holder.mealCaloriesText.setText(model.getCalories() + " ккал");
         } else {
             holder.mealCaloriesText.setText("");
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int adapterPosition = holder.getAdapterPosition();
+                if (listener != null && adapterPosition != RecyclerView.NO_POSITION) {
+                    listener.onMealClick(getItem(adapterPosition));
+                }
+            }
+        });
     }
 
-    public void updateOptions(FirestoreRecyclerOptions<MealModel> newOptions) {
-        stopListening();
-        updateOptions(newOptions);
-        startListening();
-    }
-
-    @Override
     @NonNull
+    @Override
     public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("MealRecyclerAdapter", "onCreateViewHolder called");
-        View view = null;
-        try {
-            view = LayoutInflater.from(context).inflate(R.layout.meal_recycler_row, parent, false);
-            Log.d("MealRecyclerAdapter", "View inflated successfully");
-        } catch (Exception e) {
-            Log.e("MealRecyclerAdapter", "Error inflating view", e);
-        }
+        View view = LayoutInflater.from(context).inflate(R.layout.meal_recycler_row, parent, false);
         return new MealViewHolder(view);
     }
 
+    public void setOnMealListener(OnMealListener listener) {
+        this.listener = listener;
+    }
 
-    class MealViewHolder extends RecyclerView.ViewHolder{
-
+    class MealViewHolder extends RecyclerView.ViewHolder {
         TextView mealNameText;
         TextView mealWeightText;
         TextView mealCaloriesText;
-        ImageView addBtn;
+
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
             mealNameText = itemView.findViewById(R.id.nameOfDish);
             mealWeightText = itemView.findViewById(R.id.weightOfDish);
             mealCaloriesText = itemView.findViewById(R.id.caloriesOfDish);
-//            addBtn = itemView.findViewById(R.id.add_btn_view_image);
         }
+    }
 
+    public interface OnMealListener {
+        void onMealClick(MealModel meal);
     }
 }

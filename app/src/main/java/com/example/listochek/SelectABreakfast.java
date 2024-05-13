@@ -1,6 +1,7 @@
 package com.example.listochek;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,8 +9,8 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,13 +21,26 @@ import com.example.listochek.model.MealModel;
 import com.example.listochek.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.SetOptions;
 
 import androidx.core.view.GestureDetectorCompat;
 
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class SelectABreakfast extends AppCompatActivity {
 
@@ -37,11 +51,16 @@ public class SelectABreakfast extends AppCompatActivity {
     private GestureDetectorCompat gestureDetectorCompat;
     boolean system_view = true;
     private boolean isViewButtonSelected = true;
+    List<MealModel> selectedDishes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_a_breakfast);
+
+        String userId = FirebaseUtil.currentUserId();
+        String type = getIntent().getExtras().getString("type");
+
 
         meal_rv = findViewById(R.id.meal_recycler_view);
         addDish = findViewById(R.id.addDishBtn);
@@ -59,6 +78,12 @@ public class SelectABreakfast extends AppCompatActivity {
                 ((MaterialButton) systemBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#E5E3E1")));
                 isViewButtonSelected = true;
                 setupMealRecyclerView();
+                adapter.setOnMealListener(new MealRecyclerAdapter.OnMealListener() {
+                    @Override
+                    public void onMealClick(MealModel meal) {
+                        updateSelectedDishes(meal);
+                    }
+                });
             }
         });
 
@@ -70,6 +95,12 @@ public class SelectABreakfast extends AppCompatActivity {
                 ((MaterialButton) userBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#E5E3E1")));
                 isViewButtonSelected = true;
                 setupMealRecyclerView();
+                adapter.setOnMealListener(new MealRecyclerAdapter.OnMealListener() {
+                    @Override
+                    public void onMealClick(MealModel meal) {
+                        updateSelectedDishes(meal);
+                    }
+                });
             }
         });
         addDish.setOnClickListener(new View.OnClickListener() {
@@ -83,13 +114,81 @@ public class SelectABreakfast extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveMeal(userId, type, selectedDishes);
+
                 Intent intent = new Intent(SelectABreakfast.this, HomePage.class);
                 startActivity(intent);
             }
         });
         setupMealRecyclerView();
         setupSearchBar();
+        adapter.setOnMealListener(new MealRecyclerAdapter.OnMealListener() {
+            @Override
+            public void onMealClick(MealModel meal) {
+                updateSelectedDishes(meal);
+            }
+        });
     }
+
+    public void saveMeal(String userId, String mealType, List<MealModel> selectedDishes) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Преобразование списка блюд в список Map для сохранения в Firestore
+        List<Map<String, Object>> dishesToSave = new ArrayList<>();
+        for (MealModel dish : selectedDishes) {
+            Map<String, Object> dishMap = new HashMap<>();
+            dishMap.put("id", UUID.randomUUID().toString()); // Добавляем уникальный идентификатор
+            dishMap.put("name", dish.getName());
+            dishMap.put("weight", dish.getWeight());
+            dishMap.put("calories", dish.getCalories());
+            dishMap.put("carbohydrates", dish.getCarbohydrates());
+            dishMap.put("protein", dish.getProtein());
+            dishMap.put("fats", dish.getFats());
+            dishesToSave.add(dishMap);
+        }
+
+        Map<String, Object> meal = new HashMap<>();
+        meal.put(mealType, FieldValue.arrayUnion(dishesToSave.toArray(new Map[0])));
+
+        db.collection("mealConsumption")
+                .document(userId)
+                .collection("meals")
+                .document(new SimpleDateFormat("yyyy-MM-dd").format(new Date()))
+                .set(meal, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Meal successfully saved!"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error saving meal", e));
+    }
+
+    private void updateSelectedDishes(MealModel meal) {
+        LinearLayout selectedDishesLayout = findViewById(R.id.selectedDishesLayout);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        ConstraintLayout dishLayout = (ConstraintLayout) inflater.inflate(R.layout.selected_dish_layout, selectedDishesLayout, false);
+
+        TextView nameTextView = dishLayout.findViewById(R.id.dish_name);
+        TextView weightTextView = dishLayout.findViewById(R.id.dish_weight);
+        TextView caloriesTextView = dishLayout.findViewById(R.id.dish_calories);
+        ImageButton deleteButton = dishLayout.findViewById(R.id.delete_button);
+
+        nameTextView.setText(meal.getName());
+        weightTextView.setText(meal.getWeight() + " г");
+        caloriesTextView.setText(meal.getCalories() + " ккал");
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Удаление контейнера из LinearLayout и удаление блюда из списка
+                selectedDishes.remove(meal); // Это удалит только первое вхождение, нужно модифицировать, если удалять все вхождения
+                selectedDishesLayout.removeView(dishLayout);
+            }
+        });
+
+        // Всегда добавлять выбранное блюдо в список и в LinearLayout
+        selectedDishes.add(meal);
+        selectedDishesLayout.addView(dishLayout);
+    }
+
+
+
 
     private void setupSearchBar() {
         EditText searchBar = findViewById(R.id.searchBarEditText);
