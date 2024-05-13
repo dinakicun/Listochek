@@ -62,6 +62,7 @@
             android:layout_marginBottom="20dp">
 
             <EditText
+                android:id="@+id/searchBarEditText"
                 android:layout_width="320dp"
                 android:layout_height="55dp"
                 android:background="@drawable/edittext_background"
@@ -74,7 +75,7 @@
             </EditText>
         </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
-            android:id="@+id/nameLayout"
+            android:id="@+id/selectedDishesLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -177,13 +178,51 @@
                 android:textSize="18dp"
                 android:textStyle="normal"
                 android:layout_gravity="left"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="5dp"
                 />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/systemButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Системные"
+                    android:backgroundTint="#F8F8F4"
+                    app:cornerRadius="8dp"
+                    android:textSize="14dp"
+                    android:textColor="#727272"
+                    app:strokeColor="#E5E3E1"
+                    app:strokeWidth="1dp"
+                    android:layout_margin="2dp"
+                    >
+
+                </com.google.android.material.button.MaterialButton>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/usersButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Мои"
+                    android:backgroundTint="#F8F8F4"
+                    app:cornerRadius="8dp"
+                    android:textSize="14dp"
+                    android:textColor="#727272"
+                    app:strokeColor="#E5E3E1"
+                    app:strokeWidth="1dp"
+                    android:layout_margin="2dp"
+                    >
+
+                </com.google.android.material.button.MaterialButton>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/meal_recycler_view">
+                android:id="@+id/meal_recycler_view"
+                android:layout_marginTop="10dp">
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>

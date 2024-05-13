@@ -45,6 +45,11 @@ public class MealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel, Mea
         }
     }
 
+    public void updateOptions(FirestoreRecyclerOptions<MealModel> newOptions) {
+        stopListening();
+        updateOptions(newOptions);
+        startListening();
+    }
 
     @Override
     @NonNull
@@ -74,5 +79,6 @@ public class MealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel, Mea
             mealCaloriesText = itemView.findViewById(R.id.caloriesOfDish);
 //            addBtn = itemView.findViewById(R.id.add_btn_view_image);
         }
+
     }
 }

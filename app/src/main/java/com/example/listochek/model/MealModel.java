@@ -8,17 +8,19 @@ public class MealModel {
     private Integer Carbohydrates;
     private String Name;
     private Integer Weight;
+    private String NameToLower;
 
     public MealModel() {
 
     }
-    public MealModel(Integer Calories, Integer Fats, Integer Protein, Integer Carbohydrates, String Name, Integer Weight) {
+    public MealModel(Integer Calories, Integer Fats, Integer Protein, Integer Carbohydrates, String Name, Integer Weight, String NameToLower) {
         this.Calories = Calories;
         this.Fats = Fats;
         this.Protein = Protein;
         this.Carbohydrates = Carbohydrates;
         this.Name = Name;
         this.Weight = Weight;
+        this.NameToLower = NameToLower;
     }
 
     public Integer getCalories() {
@@ -33,10 +35,13 @@ public class MealModel {
     public Integer getCarbohydrates() {
         return Carbohydrates;
     }
-
     public String getName() {
         return Name;
     }
+    public String getNameToLower() {
+        return NameToLower;
+    }
+
     public Integer getWeight() {
         return Weight;
     }
@@ -56,6 +61,7 @@ public class MealModel {
     public void setName(String Name) {
         this.Name = Name;
     }
+    public void setNameToLower() { this.NameToLower = NameToLower;}
     public void setWeight(Integer Weight) {
         this.Weight = Weight;
     }

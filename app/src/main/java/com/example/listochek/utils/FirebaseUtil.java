@@ -32,4 +32,7 @@ public class FirebaseUtil {
     public static CollectionReference allMealsCollectionReference(){
         return FirebaseFirestore.getInstance().collection("meal");
     }
+    public static CollectionReference userMealsCollectionReference(){
+        return FirebaseFirestore.getInstance().collection("meal").document("usersMeal").collection(currentUserId());
+    }
 }

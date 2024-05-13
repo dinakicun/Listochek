@@ -14,6 +14,8 @@ import com.example.listochek.model.MealModel;
 import com.example.listochek.utils.FirebaseUtil;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Locale;
+
 public class AddDish extends AppCompatActivity {
     private EditText nameText, weightText, caloriesText, proteinText, fatsText, carbohydratesText;
     private FirebaseFirestore db;
@@ -70,7 +72,7 @@ public class AddDish extends AppCompatActivity {
 
         String userId = FirebaseUtil.currentUserId();
 
-        MealModel meal = new MealModel(calories, fats, protein, carbohydrates, name, weight);
+        MealModel meal = new MealModel(calories, fats, protein, carbohydrates, name, weight, name.toLowerCase());
         db.collection("meal").document("usersMeal").collection(userId).add(meal)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Блюдо успешно добавлено!", Toast.LENGTH_SHORT).show();
