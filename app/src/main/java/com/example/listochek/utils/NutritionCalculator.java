@@ -1,8 +1,20 @@
 package com.example.listochek.utils;
 
 import com.example.listochek.model.CharacteristicsModel;
+import com.example.listochek.model.MealModel;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class NutritionCalculator {
+
+    private static int totalCalories;
+    private static int totalProtein;
+    private static int totalCarbohydrates;
+    private static int totalFats;
 
     // Коэффициенты для расчета углеводов, белков, жиров в зависимости от целевой калорийности и воды.
     private static final double PROTEIN_PER_KG = 1.2; // грамм белка на кг идеального веса
@@ -26,7 +38,6 @@ public class NutritionCalculator {
 
         double water = weight * WATER_PER_KG; // Расчет нормы воды
 
-
         return new CharacteristicsModel(dailyCalories, fat, protein, carbs, userId, water);
     }
 
@@ -40,5 +51,87 @@ public class NutritionCalculator {
 
         double multiplier = activeLifestyle ? 1.55 : 1.2;
         return (int) Math.round(bmr * multiplier);
+    }
+
+    public static void sumDailyIntake(String userId, Runnable callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        totalCalories = 0;
+        totalProtein = 0;
+        totalCarbohydrates = 0;
+        totalFats = 0;
+
+        db.collection("mealConsumption")
+                .document(userId)
+                .collection("meals")
+                .document(currentDate)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Map<String, Object> data = documentSnapshot.getData();
+                        if (data != null) {
+                            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                                List<Map<String, Object>> meals = (List<Map<String, Object>>) entry.getValue();
+                                for (Map<String, Object> mealData : meals) {
+                                    String mealId = (String) mealData.get("mealId");
+                                    if (mealId != null) {
+                                        fetchMealData(db, userId, mealId, callback);
+                                    }
+                                }
+                            }
+                        } else {
+                            callback.run();
+                        }
+                    } else {
+                        callback.run();
+                    }
+                })
+                .addOnFailureListener(e -> callback.run());
+    }
+
+    private static void fetchMealData(FirebaseFirestore db, String userId, String mealId, Runnable callback) {
+        db.collection("meal").document(mealId).get().addOnSuccessListener(mealSnapshot -> {
+            if (mealSnapshot.exists()) {
+                MealModel meal = mealSnapshot.toObject(MealModel.class);
+                if (meal != null) {
+                    updateTotals(meal);
+                }
+                callback.run();
+            } else {
+                db.collection("meal").document("usersMeal").collection(userId).document(mealId).get().addOnSuccessListener(userMealSnapshot -> {
+                    if (userMealSnapshot.exists()) {
+                        MealModel meal = userMealSnapshot.toObject(MealModel.class);
+                        if (meal != null) {
+                            updateTotals(meal);
+                        }
+                    }
+                    callback.run();
+                }).addOnFailureListener(e -> callback.run());
+            }
+        }).addOnFailureListener(e -> callback.run());
+    }
+
+    private static void updateTotals(MealModel meal) {
+        totalCalories += meal.getCalories() != null ? meal.getCalories() : 0;
+        totalProtein += meal.getProtein() != null ? meal.getProtein() : 0;
+        totalCarbohydrates += meal.getCarbohydrates() != null ? meal.getCarbohydrates() : 0;
+        totalFats += meal.getFats() != null ? meal.getFats() : 0;
+    }
+
+    public static int getTotalCalories() {
+        return totalCalories;
+    }
+
+    public static int getTotalProtein() {
+        return totalProtein;
+    }
+
+    public static int getTotalCarbohydrates() {
+        return totalCarbohydrates;
+    }
+
+    public static int getTotalFats() {
+        return totalFats;
     }
 }

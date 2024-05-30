@@ -14,6 +14,11 @@ public class NutritionViewModel extends ViewModel {
     private MutableLiveData<Integer> protein = new MutableLiveData<>();
     private MutableLiveData<Integer> carbohydrates = new MutableLiveData<>();
 
+    private MutableLiveData<Integer> totalCalories = new MutableLiveData<>();
+    private MutableLiveData<Integer> totalFats = new MutableLiveData<>();
+    private MutableLiveData<Integer> totalProtein = new MutableLiveData<>();
+    private MutableLiveData<Integer> totalCarbohydrates = new MutableLiveData<>();
+
     public void loadCharacteristics(String userId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("characteristics").document(userId);
@@ -31,6 +36,13 @@ public class NutritionViewModel extends ViewModel {
         });
     }
 
+    public void setCalculatedValues(int totalCalories, int totalFats, int totalProtein, int totalCarbohydrates) {
+        this.totalCalories.setValue(totalCalories);
+        this.totalFats.setValue(totalFats);
+        this.totalProtein.setValue(totalProtein);
+        this.totalCarbohydrates.setValue(totalCarbohydrates);
+    }
+
     public LiveData<Integer> getCalories() {
         return calories;
     }
@@ -46,5 +58,20 @@ public class NutritionViewModel extends ViewModel {
     public LiveData<Integer> getCarbohydrates() {
         return carbohydrates;
     }
-}
 
+    public LiveData<Integer> getTotalCalories() {
+        return totalCalories;
+    }
+
+    public LiveData<Integer> getTotalFats() {
+        return totalFats;
+    }
+
+    public LiveData<Integer> getTotalProtein() {
+        return totalProtein;
+    }
+
+    public LiveData<Integer> getTotalCarbohydrates() {
+        return totalCarbohydrates;
+    }
+}

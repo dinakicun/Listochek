@@ -3,7 +3,6 @@ package com.example.listochek;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.text.TextRunShaper;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -16,7 +15,6 @@ import com.example.listochek.model.CharacteristicsModel;
 import com.example.listochek.model.UserModel;
 import com.example.listochek.utils.FirebaseUtil;
 import com.example.listochek.utils.NutritionCalculator;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -28,7 +26,6 @@ public class ChangePersonalData extends AppCompatActivity {
     String userId;
     Boolean activity;
     private GestureDetectorCompat gestureDetectorCompat;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +42,13 @@ public class ChangePersonalData extends AppCompatActivity {
         userId = FirebaseUtil.currentUserId();
         getUserData(userId);
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setUserData(userId);
-            }
-        });
+        save.setOnClickListener(v -> setUserData(userId));
 
-        sex.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (sex.getText().equals("Мужской")) {
-                    sex.setText("Женский");
-                } else {
-                    sex.setText("Мужской");
-                }
+        sex.setOnClickListener(v -> {
+            if (sex.getText().equals("Мужской")) {
+                sex.setText("Женский");
+            } else {
+                sex.setText("Мужской");
             }
         });
     }
@@ -77,18 +66,16 @@ public class ChangePersonalData extends AppCompatActivity {
                         weight.setText(String.valueOf(userModel.getWeight()));
                         height.setText(String.valueOf(userModel.getHeight()));
                         activity = userModel.getActiveLS();
-                        if ((String.valueOf(userModel.getSex()).equals("М"))) {
+                        if (String.valueOf(userModel.getSex()).equals("М")) {
                             sex.setText("Мужской");
-                        } else if ((String.valueOf(userModel.getSex()).equals("Ж"))) {
+                        } else if (String.valueOf(userModel.getSex()).equals("Ж")) {
                             sex.setText("Женский");
-
                         }
-
                     }
                 }
-            } else {
             }
         });
+
         gestureDetectorCompat = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -106,23 +93,27 @@ public class ChangePersonalData extends AppCompatActivity {
                 return super.onFling(e1, e2, velocityX, velocityY);
             }
         });
-
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         gestureDetectorCompat.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
+
     private void setUserData(String userId) {
         String updatedName = name.getText().toString();
         String updatedAge = age.getText().toString();
         String updatedHeight = height.getText().toString();
         String updatedWeight = weight.getText().toString();
         String updatedSex = sex.getText().toString().equals("Мужской") ? "М" : "Ж";
+
+        if (!validateInput(updatedName, updatedAge, updatedHeight, updatedWeight)) {
+            return;
+        }
+
         Boolean activityType = activity;
         CharacteristicsModel newNutrition = NutritionCalculator.calculateNutrition(updatedSex, Integer.parseInt(updatedAge), Integer.parseInt(updatedHeight), Integer.parseInt(updatedWeight), activityType, userId);
-
-
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(userId).get().addOnCompleteListener(task -> {
@@ -144,12 +135,34 @@ public class ChangePersonalData extends AppCompatActivity {
                                     startActivity(intent);
                                 })
                                 .addOnFailureListener(e -> {
+                                    Toast.makeText(ChangePersonalData.this, "Ошибка обновления данных", Toast.LENGTH_SHORT).show();
                                 });
                     }
                 }
             }
         });
     }
+
+    private boolean validateInput(String name, String age, String height, String weight) {
+        if (name.isEmpty()) {
+            Toast.makeText(this, "Имя не может быть пустым", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!age.matches("\\d+")) {
+            Toast.makeText(this, "Возраст должен быть числом", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!height.matches("\\d+")) {
+            Toast.makeText(this, "Рост должен быть числом", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!weight.matches("\\d+")) {
+            Toast.makeText(this, "Вес должен быть числом", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
     void updateNutritionDetails(CharacteristicsModel nutrition) {
         FirebaseUtil.currentCharacteristicsDetails()
                 .set(nutrition)

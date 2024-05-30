@@ -48,11 +48,12 @@ public class SelectABreakfast extends AppCompatActivity {
     MealRecyclerAdapter adapter;
     Button saveBtn, systemBtn, userBtn;
     ImageButton addDish;
+    TextView typeOfDishText;
     private GestureDetectorCompat gestureDetectorCompat;
     boolean system_view = true;
     private boolean isViewButtonSelected = true;
     List<MealModel> selectedDishes = new ArrayList<>();
-
+    //поменять название и текст "Завтрак"
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,17 @@ public class SelectABreakfast extends AppCompatActivity {
 
         String userId = FirebaseUtil.currentUserId();
         String type = getIntent().getExtras().getString("type");
+        typeOfDishText = findViewById(R.id.typeOfDishText);
 
+        if (type.equals("Breakfast")) {
+            typeOfDishText.setText("Завтрак");
+        } else if (type.equals("Dinner")) {
+            typeOfDishText.setText("Ужин");
+        } else if (type.equals("Lunch")) {
+            typeOfDishText.setText("Обед");
+        } else if (type.equals("Snack")) {
+            typeOfDishText.setText("Перекус");
+        }
 
         meal_rv = findViewById(R.id.meal_recycler_view);
         addDish = findViewById(R.id.addDishBtn);
@@ -115,7 +126,6 @@ public class SelectABreakfast extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveMeal(userId, type, selectedDishes);
-
                 Intent intent = new Intent(SelectABreakfast.this, HomePage.class);
                 startActivity(intent);
             }
@@ -133,17 +143,12 @@ public class SelectABreakfast extends AppCompatActivity {
     public void saveMeal(String userId, String mealType, List<MealModel> selectedDishes) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Преобразование списка блюд в список Map для сохранения в Firestore
         List<Map<String, Object>> dishesToSave = new ArrayList<>();
         for (MealModel dish : selectedDishes) {
             Map<String, Object> dishMap = new HashMap<>();
             dishMap.put("id", UUID.randomUUID().toString()); // Добавляем уникальный идентификатор
-            dishMap.put("name", dish.getName());
-            dishMap.put("weight", dish.getWeight());
-            dishMap.put("calories", dish.getCalories());
-            dishMap.put("carbohydrates", dish.getCarbohydrates());
-            dishMap.put("protein", dish.getProtein());
-            dishMap.put("fats", dish.getFats());
+            dishMap.put("mealId", dish.getId()); // Добавляем идентификатор блюда
+
             dishesToSave.add(dishMap);
         }
 
@@ -176,19 +181,15 @@ public class SelectABreakfast extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Удаление контейнера из LinearLayout и удаление блюда из списка
-                selectedDishes.remove(meal); // Это удалит только первое вхождение, нужно модифицировать, если удалять все вхождения
+
+                selectedDishes.remove(meal);
                 selectedDishesLayout.removeView(dishLayout);
             }
         });
 
-        // Всегда добавлять выбранное блюдо в список и в LinearLayout
         selectedDishes.add(meal);
         selectedDishesLayout.addView(dishLayout);
     }
-
-
-
 
     private void setupSearchBar() {
         EditText searchBar = findViewById(R.id.searchBarEditText);
@@ -208,7 +209,7 @@ public class SelectABreakfast extends AppCompatActivity {
         });
     }
 
-// Функция поиска блюд по полю с названием блюда маленького регистра
+    // Функция поиска блюд по полю с названием блюда маленького регистра
     private void filterMeals(String text) {
 //        Query query;
 //        if (text.isEmpty()) {
@@ -230,6 +231,7 @@ public class SelectABreakfast extends AppCompatActivity {
 //        meal_rv.setAdapter(adapter);
 //        adapter.startListening();
     }
+
 
 
     void setupMealRecyclerView(){

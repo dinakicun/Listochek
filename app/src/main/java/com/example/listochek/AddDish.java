@@ -14,8 +14,6 @@ import com.example.listochek.model.MealModel;
 import com.example.listochek.utils.FirebaseUtil;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Locale;
-
 public class AddDish extends AppCompatActivity {
     private EditText nameText, weightText, caloriesText, proteinText, fatsText, carbohydratesText;
     private FirebaseFirestore db;
@@ -27,8 +25,6 @@ public class AddDish extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-
-
         nameText = findViewById(R.id.nameText);
         weightText = findViewById(R.id.weightText);
         caloriesText = findViewById(R.id.caloriesText);
@@ -38,6 +34,7 @@ public class AddDish extends AppCompatActivity {
 
         findViewById(R.id.save).setOnClickListener(v -> saveDish());
     }
+
     private void saveDish() {
         String name = nameText.getText().toString().trim();
 
@@ -71,10 +68,11 @@ public class AddDish extends AppCompatActivity {
         }
 
         String userId = FirebaseUtil.currentUserId();
+        String documentId = db.collection("meal").document("usersMeal").collection(userId).document().getId();
 
-        MealModel meal = new MealModel(calories, fats, protein, carbohydrates, name, weight, name.toLowerCase());
-        db.collection("meal").document("usersMeal").collection(userId).add(meal)
-                .addOnSuccessListener(documentReference -> {
+        MealModel meal = new MealModel(calories, fats, protein, carbohydrates, name, weight, name.toLowerCase(), documentId);
+        db.collection("meal").document("usersMeal").collection(userId).document(documentId).set(meal)
+                .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Блюдо успешно добавлено!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(AddDish.this, CaloriesFragment.class);
                     startActivity(intent);
@@ -84,5 +82,4 @@ public class AddDish extends AppCompatActivity {
                     Toast.makeText(this, "Ошибка при добавлении блюда: " + e.toString(), Toast.LENGTH_SHORT).show();
                 });
     }
-
 }

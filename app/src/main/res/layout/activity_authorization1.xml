@@ -71,8 +71,9 @@
             android:background="@drawable/edittext_background"
             android:padding="10dp"
             android:layout_gravity="center"
-            android:inputType="textEmailAddress"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:inputType="textPassword"
+            >
 
         </EditText>
 

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.listochek.utils.FirebaseUtil;
+import com.example.listochek.utils.NutritionCalculator;
 import com.example.listochek.utils.NutritionViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -27,7 +28,6 @@ public class HomePage extends AppCompatActivity {
     CaloriesFragment caloriesFragment;
     String userId;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +38,7 @@ public class HomePage extends AppCompatActivity {
         caloriesFragment = new CaloriesFragment();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        userButton= findViewById(R.id.main_user_btn);
+        userButton = findViewById(R.id.main_user_btn);
         userId = FirebaseUtil.currentUserId();
 
         userButton.setOnClickListener(new View.OnClickListener() {
@@ -52,48 +52,49 @@ public class HomePage extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId() == R.id.menu_water){
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.main_frame_layout, new WaterFragment())
-                                    .commit();
-
+                if (item.getItemId() == R.id.menu_water) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_frame_layout, new WaterFragment())
+                            .commit();
                     return true;
-                }
-                else if (item.getItemId() == R.id.menu_home){
+                } else if (item.getItemId() == R.id.menu_home) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, homeFragment).commit();
                     return true;
-                }
-                else if(item.getItemId() == R.id.menu_calories){
+                } else if (item.getItemId() == R.id.menu_calories) {
                     NutritionViewModel nutritionViewModel = new ViewModelProvider(HomePage.this).get(NutritionViewModel.class);
 
-                    nutritionViewModel.loadCharacteristics(userId);
+                    nutritionViewModel.loadCharacteristics(userId); // Вызов метода loadCharacteristics
 
-                    nutritionViewModel.getCalories().observe(HomePage.this, calories -> {
-                        if (calories != null) {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.main_frame_layout, new CaloriesFragment())
-                                    .commit();
-                        }
+                    NutritionCalculator.sumDailyIntake(userId, () -> {
+                        int totalCalories = NutritionCalculator.getTotalCalories();
+                        int totalFats = NutritionCalculator.getTotalFats();
+                        int totalProtein = NutritionCalculator.getTotalProtein();
+                        int totalCarbohydrates = NutritionCalculator.getTotalCarbohydrates();
+
+                        nutritionViewModel.setCalculatedValues(totalCalories, totalFats, totalProtein, totalCarbohydrates);
+
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_frame_layout, new CaloriesFragment())
+                                .commit();
                     });
+
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
         });
+
         bottomNavigationView.setSelectedItemId(R.id.menu_calories);
 
         getFCMToken();
-
     }
 
-    void getFCMToken(){
+    void getFCMToken() {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
+            if (task.isSuccessful()) {
                 String token = task.getResult();
                 Log.i("My token", token);
-
             }
         });
     }
