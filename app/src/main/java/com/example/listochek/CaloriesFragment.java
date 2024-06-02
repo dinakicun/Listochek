@@ -1,6 +1,8 @@
 package com.example.listochek;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,9 +14,18 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.listochek.utils.FirebaseUtil;
 import com.example.listochek.utils.NutritionViewModel;
+import com.example.listochek.utils.UserPointsViewModel;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class CaloriesFragment extends Fragment {
+
+    private static final String PREFS_NAME = "FoodPrefs";
+    private static final String LAST_FOOD_UPDATE_KEY = "lastFoodPointsUpdate";
 
     public CaloriesFragment() {
     }
@@ -23,44 +34,50 @@ public class CaloriesFragment extends Fragment {
     ImageButton lunch_btn;
     ImageButton dinner_btn;
     ImageButton snack_btn;
+    UserPointsViewModel userPointsViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calories, container, false);
 
-        NutritionViewModel viewModel = new ViewModelProvider(requireActivity()).get(NutritionViewModel.class);
+        NutritionViewModel nutritionViewModel = new ViewModelProvider(requireActivity()).get(NutritionViewModel.class);
+        userPointsViewModel = new ViewModelProvider(requireActivity()).get(UserPointsViewModel.class);
 
-        viewModel.getCalories().observe(getViewLifecycleOwner(), calories -> {
+        nutritionViewModel.getCalories().observe(getViewLifecycleOwner(), calories -> {
             TextView goalView = view.findViewById(R.id.goalView);
             goalView.setText("Ваша цель: " + calories + " калорий");
 
-            viewModel.getTotalCalories().observe(getViewLifecycleOwner(), totalCalories -> {
+            nutritionViewModel.getTotalCalories().observe(getViewLifecycleOwner(), totalCalories -> {
                 TextView finishedNumberOfCaloriesText = view.findViewById(R.id.finishedNumberOfCaloriesText);
                 finishedNumberOfCaloriesText.setText(String.valueOf(totalCalories));
 
                 TextView leftNumberOfCaloriesText = view.findViewById(R.id.leftNumberOfCaloriesText);
                 int leftCalories = calories - totalCalories;
                 leftNumberOfCaloriesText.setText(String.valueOf(Math.max(leftCalories, 0)));
+
+                if (leftCalories <= 0) {
+                    updateFoodPointsIfNotAlreadyUpdated();
+                }
             });
         });
 
-        viewModel.getTotalCarbohydrates().observe(getViewLifecycleOwner(), totalCarbs -> {
-            viewModel.getCarbohydrates().observe(getViewLifecycleOwner(), carbs -> {
+        nutritionViewModel.getTotalCarbohydrates().observe(getViewLifecycleOwner(), totalCarbs -> {
+            nutritionViewModel.getCarbohydrates().observe(getViewLifecycleOwner(), carbs -> {
                 TextView leftCarbohydratesText = view.findViewById(R.id.leftCarbohydratesText);
                 leftCarbohydratesText.setText(totalCarbs + "/" + carbs);
             });
         });
 
-        viewModel.getTotalProtein().observe(getViewLifecycleOwner(), totalProtein -> {
-            viewModel.getProtein().observe(getViewLifecycleOwner(), protein -> {
+        nutritionViewModel.getTotalProtein().observe(getViewLifecycleOwner(), totalProtein -> {
+            nutritionViewModel.getProtein().observe(getViewLifecycleOwner(), protein -> {
                 TextView leftProteinsText = view.findViewById(R.id.leftProteinsText);
                 leftProteinsText.setText(totalProtein + "/" + protein);
             });
         });
 
-        viewModel.getTotalFats().observe(getViewLifecycleOwner(), totalFats -> {
-            viewModel.getFats().observe(getViewLifecycleOwner(), fats -> {
+        nutritionViewModel.getTotalFats().observe(getViewLifecycleOwner(), totalFats -> {
+            nutritionViewModel.getFats().observe(getViewLifecycleOwner(), fats -> {
                 TextView leftFatsText = view.findViewById(R.id.leftFatsText);
                 leftFatsText.setText(totalFats + "/" + fats);
             });
@@ -100,5 +117,20 @@ public class CaloriesFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void updateFoodPointsIfNotAlreadyUpdated() {
+        String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        SharedPreferences prefs = requireActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String lastUpdateDate = prefs.getString(LAST_FOOD_UPDATE_KEY, "");
+
+        if (!todayDate.equals(lastUpdateDate)) {
+            String userId = FirebaseUtil.currentUserId();
+            userPointsViewModel.incrementFoodPoints(userId);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(LAST_FOOD_UPDATE_KEY, todayDate);
+            editor.apply();
+        }
     }
 }

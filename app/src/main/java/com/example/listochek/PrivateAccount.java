@@ -25,6 +25,11 @@ public class PrivateAccount extends AppCompatActivity {
     private LinearLayout changeData, exit;
     private GestureDetectorCompat gestureDetectorCompat;
 
+    private static final String PREFS_NAME = "WaterPrefs";
+    private static final String LAST_UPDATE_KEY = "lastWaterPointsUpdate";
+    private static final String FOOD_PREFS_NAME = "FoodPrefs";
+    private static final String LAST_FOOD_UPDATE_KEY = "lastFoodPointsUpdate";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +60,19 @@ public class PrivateAccount extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.remove("user_id");
                 editor.apply();
+
+                // Очистка LAST_FOOD_UPDATE_KEY
+                SharedPreferences foodPrefs = getSharedPreferences(FOOD_PREFS_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor foodEditor = foodPrefs.edit();
+                foodEditor.remove(LAST_FOOD_UPDATE_KEY);
+                foodEditor.apply();
+
+                // Очистка LAST_UPDATE_KEY
+                SharedPreferences waterPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor waterEditor = waterPrefs.edit();
+                waterEditor.remove(LAST_UPDATE_KEY);
+                waterEditor.apply();
+
                 Intent intent = new Intent(PrivateAccount.this, MainActivity.class);
                 startActivity(intent);
                 finish();

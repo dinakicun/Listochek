@@ -8,8 +8,10 @@ public class UserModel {
     private Integer height;
     private Integer weight;
     private String sex;
-
     private Boolean activeLS;
+    private Integer foodPoints;
+    private Integer waterPoints;
+
     public UserModel() {
     }
 
@@ -21,8 +23,9 @@ public class UserModel {
         this.weight = weight;
         this.sex = sex;
         this.activeLS = activeLS;
+        this.foodPoints = 1;
+        this.waterPoints = 1;
     }
-
     public String getEmail() {
         return email;
     }
@@ -77,5 +80,21 @@ public class UserModel {
 
     public void setActiveLS(Boolean activeLS) {
         this.activeLS = activeLS;
+    }
+
+    public Integer getFoodPoints() {
+        return foodPoints;
+    }
+
+    public void setFoodPoints(Integer foodPoints) {
+        this.foodPoints = foodPoints;
+    }
+
+    public Integer getWaterPoints() {
+        return waterPoints;
+    }
+
+    public void setWaterPoints(Integer waterPoints) {
+        this.waterPoints = waterPoints;
     }
 }

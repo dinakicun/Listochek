@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.listochek.utils.FirebaseUtil;
 import com.example.listochek.utils.NutritionCalculator;
 import com.example.listochek.utils.NutritionViewModel;
+import com.example.listochek.utils.UserPointsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -22,11 +24,14 @@ public class HomePage extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     ImageButton userButton;
+    TextView waterPointsText;
+    TextView foodPointsText;
 
     HomeFragment homeFragment;
     WaterFragment waterFragment;
     CaloriesFragment caloriesFragment;
     String userId;
+    UserPointsViewModel userPointsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +44,11 @@ public class HomePage extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         userButton = findViewById(R.id.main_user_btn);
+        waterPointsText = findViewById(R.id.waterPointsText);
+        foodPointsText = findViewById(R.id.foodPointsText);
         userId = FirebaseUtil.currentUserId();
+
+        userPointsViewModel = new ViewModelProvider(this).get(UserPointsViewModel.class);
 
         userButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +72,7 @@ public class HomePage extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.menu_calories) {
                     NutritionViewModel nutritionViewModel = new ViewModelProvider(HomePage.this).get(NutritionViewModel.class);
 
-                    nutritionViewModel.loadCharacteristics(userId); // Вызов метода loadCharacteristics
+                    nutritionViewModel.loadCharacteristics(userId);
 
                     NutritionCalculator.sumDailyIntake(userId, () -> {
                         int totalCalories = NutritionCalculator.getTotalCalories();
@@ -87,6 +96,19 @@ public class HomePage extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.menu_calories);
 
+        userPointsViewModel.getWaterPoints().observe(this, waterPoints -> {
+            if (waterPoints != null) {
+                waterPointsText.setText(String.valueOf(waterPoints));
+            }
+        });
+
+        userPointsViewModel.getFoodPoints().observe(this, foodPoints -> {
+            if (foodPoints != null) {
+                foodPointsText.setText(String.valueOf(foodPoints));
+            }
+        });
+
+        userPointsViewModel.loadUserPoints(userId);
         getFCMToken();
     }
 
