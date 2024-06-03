@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.listochek.model.CharacteristicsModel;
+import com.example.listochek.model.PlantModel;
 import com.example.listochek.model.UserModel;
 import com.example.listochek.utils.FirebaseUtil;
 import com.example.listochek.utils.NutritionCalculator;
@@ -24,7 +25,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import androidx.core.view.GestureDetectorCompat;
+
+import java.util.Date;
+
 public class RegistrationFinish extends AppCompatActivity {
     String age;
     String name;
@@ -40,7 +46,6 @@ public class RegistrationFinish extends AppCompatActivity {
     boolean active_lifestyle;
     private boolean isLifestyleSelected = false;
     private GestureDetectorCompat gestureDetectorCompat;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +83,10 @@ public class RegistrationFinish extends AppCompatActivity {
                 isLifestyleSelected = true;
             }
         });
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (!isLifestyleSelected) {
                     Toast.makeText(RegistrationFinish.this, "Пожалуйста, выберите образ жизни для продолжения", Toast.LENGTH_LONG).show();
                 } else {
@@ -89,55 +94,70 @@ public class RegistrationFinish extends AppCompatActivity {
                 }
             }
         });
-
     }
-        void setUser(){
-            Integer intAge = Integer.parseInt(age);
-            Integer intHeight = Integer.parseInt(height);
-            Integer intWeight = Integer.parseInt(weight);
-            String userId = FirebaseUtil.currentUserId();
-            if (userModel == null) {
-                userModel = new UserModel(email, name, intAge, intHeight, intWeight, sex, active_lifestyle);
-                nutrition = NutritionCalculator.calculateNutrition(sex, intAge, intHeight, intWeight, active_lifestyle, userId);
 
+    void setUser() {
+        Integer intAge = Integer.parseInt(age);
+        Integer intHeight = Integer.parseInt(height);
+        Integer intWeight = Integer.parseInt(weight);
+        String userId = FirebaseUtil.currentUserId();
+        if (userModel == null) {
+            userModel = new UserModel(email, name, intAge, intHeight, intWeight, sex, active_lifestyle);
+            nutrition = NutritionCalculator.calculateNutrition(sex, intAge, intHeight, intWeight, active_lifestyle, userId);
+        }
+
+        FirebaseUtil.currentUserDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    saveNutritionDetails(nutrition);
+                    savePlantDetails(userId);  // Вызов метода сохранения данных растения
+                    SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("user_id", userId);
+                    editor.apply();
+                    Intent intent = new Intent(RegistrationFinish.this, HomePage.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
             }
-            FirebaseUtil.currentUserDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
-                        saveNutritionDetails(nutrition);
-                        SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("user_id", userId);
-                        editor.apply();
-                        Intent intent = new Intent(RegistrationFinish.this,HomePage.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
-                        startActivity(intent);
-                    }
-                }
-            });
-        }
-        void saveNutritionDetails(CharacteristicsModel nutrition) {
-            FirebaseUtil.currentCharacteristicsDetails()
-                    .set(nutrition)
-                    .addOnSuccessListener(aVoid -> Toast.makeText(RegistrationFinish.this, "Данные сохранены", Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(RegistrationFinish.this, "Ошибка сбора данных", Toast.LENGTH_SHORT).show();
-                    });
-        }
-        void getUser(){
-            FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
-                        userModel =   task.getResult().toObject(UserModel.class);
-                        if(userModel==null){
-                            setUser();
-                        }
-
-                    }
-                }
-            });
-        }
-
+        });
     }
+
+    void saveNutritionDetails(CharacteristicsModel nutrition) {
+        FirebaseUtil.currentCharacteristicsDetails()
+                .set(nutrition)
+                .addOnSuccessListener(aVoid -> Toast.makeText(RegistrationFinish.this, "Данные сохранены", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(RegistrationFinish.this, "Ошибка сбора данных", Toast.LENGTH_SHORT).show());
+    }
+
+    void savePlantDetails(String userId) {
+        Date currentDate = new Date();
+        PlantModel plantModel = new PlantModel();
+        plantModel.setWaterLevel(1);
+        plantModel.setFertilizerLevel(1);
+        plantModel.setLastWatered(currentDate);
+        plantModel.setLastFertilized(currentDate);
+        plantModel.setWaterExperience(100);
+        plantModel.setFertilizerExperience(100);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("plants").document(userId).set(plantModel)
+                .addOnSuccessListener(aVoid -> Log.d("RegistrationFinish", "Plant data saved successfully"))
+                .addOnFailureListener(e -> Log.e("RegistrationFinish", "Failed to save plant data", e));
+    }
+
+    void getUser() {
+        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    userModel = task.getResult().toObject(UserModel.class);
+                    if (userModel == null) {
+                        setUser();
+                    }
+                }
+            }
+        });
+    }
+}

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.listochek.model.CharacteristicsModel;
+import com.example.listochek.model.PlantModel;
 import com.example.listochek.model.UserModel;
 import com.example.listochek.utils.FirebaseUtil;
 import com.example.listochek.utils.NutritionCalculator;
@@ -23,8 +25,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.core.view.GestureDetectorCompat;
+
+import java.util.Date;
 
 public class AuthorizationFinish extends AppCompatActivity {
     UserModel userModel;
@@ -66,6 +71,7 @@ public class AuthorizationFinish extends AppCompatActivity {
                 isLifestyleSelected = true;
             }
         });
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,15 +101,17 @@ public class AuthorizationFinish extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         gestureDetectorCompat.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
-    void setUserActivity(){
+
+    void setUserActivity() {
         String userId = FirebaseUtil.currentUserId();
 
-        if(userModel!=null){
+        if (userModel != null) {
             userModel.setActiveLS(active_lifestyle);
 
             int age = userModel.getAge();
@@ -112,11 +120,14 @@ public class AuthorizationFinish extends AppCompatActivity {
             String sex = userModel.getSex();
             newNutrition = NutritionCalculator.calculateNutrition(sex, age, height, weight, active_lifestyle, userId);
         }
+
         FirebaseUtil.currentUserDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     updateNutritionDetails(newNutrition);
+                    checkAndCreatePlantData(userId); // Вызов метода проверки и создания данных растения
+                    checkAndCreatePointsData(userId); // Вызов метода проверки и создания данных очков
                     Intent intent = new Intent(AuthorizationFinish.this, HomePage.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
@@ -124,20 +135,20 @@ public class AuthorizationFinish extends AppCompatActivity {
                     editor.putString("user_id", userId);
                     editor.apply();
                     startActivity(intent);
-
-                }
-                else{
+                } else {
                     Toast.makeText(AuthorizationFinish.this, "Ошибка авторизации: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
+
     void updateNutritionDetails(CharacteristicsModel nutrition) {
         FirebaseUtil.currentCharacteristicsDetails()
                 .set(nutrition)
                 .addOnSuccessListener(aVoid -> Toast.makeText(AuthorizationFinish.this, "Nutrition details updated successfully.", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(AuthorizationFinish.this, "Error updating nutrition details.", Toast.LENGTH_SHORT).show());
     }
+
     void getUserActivity() {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -148,4 +159,57 @@ public class AuthorizationFinish extends AppCompatActivity {
             }
         });
     }
+
+    void checkAndCreatePlantData(String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("plants").document(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document == null || !document.exists()) {
+                    savePlantDetails(userId);
+                }
+            }
+        });
     }
+
+    void checkAndCreatePointsData(String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null) {
+                    boolean updateNeeded = false;
+                    if (!document.contains("waterPoints")) {
+                        document.getReference().update("waterPoints", 1);
+                        updateNeeded = true;
+                    }
+                    if (!document.contains("foodPoints")) {
+                        document.getReference().update("foodPoints", 1);
+                        updateNeeded = true;
+                    }
+                    if (updateNeeded) {
+                        Log.d("AuthorizationFinish", "Points data created successfully");
+                    }
+                }
+            }
+        });
+    }
+
+
+
+    void savePlantDetails(String userId) {
+        Date currentDate = new Date();
+        PlantModel plantModel = new PlantModel();
+        plantModel.setWaterLevel(1);
+        plantModel.setFertilizerLevel(1);
+        plantModel.setLastWatered(currentDate);
+        plantModel.setLastFertilized(currentDate);
+        plantModel.setWaterExperience(100);
+        plantModel.setFertilizerExperience(100);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("plants").document(userId).set(plantModel)
+                .addOnSuccessListener(aVoid -> Log.d("AuthorizationFinish", "Plant data saved successfully"))
+                .addOnFailureListener(e -> Log.e("AuthorizationFinish", "Failed to save plant data", e));
+    }
+}

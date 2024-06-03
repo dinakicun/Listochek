@@ -33,7 +33,7 @@ public class WaterFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String PREFS_NAME = "WaterPrefs";
     private static final String LAST_UPDATE_KEY = "lastWaterPointsUpdate";
-    private UserPointsViewModel userPointsViewModel;
+    UserPointsViewModel userPointsViewModel;
 
     public WaterFragment() {
     }
@@ -42,36 +42,40 @@ public class WaterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_water, container, false);
-        CombinedWaterViewModel combinedWaterViewModel = new ViewModelProvider(requireActivity()).get(CombinedWaterViewModel.class);
-        userPointsViewModel = new ViewModelProvider(requireActivity()).get(UserPointsViewModel.class);
+        CombinedWaterViewModel viewModel = new ViewModelProvider(requireActivity()).get(CombinedWaterViewModel.class);
 
         TextView finishedNumberOfWaterText = view.findViewById(R.id.finishedNumberOfWaterText);
         TextView leftNumberOfWaterText = view.findViewById(R.id.leftNumberOfWaterText);
         TextView goalView = view.findViewById(R.id.goalView);
 
         userId = FirebaseUtil.currentUserId();
-        combinedWaterViewModel.loadData(userId);
-        userPointsViewModel.loadUserPoints(userId);
+        viewModel.loadData(userId);
 
-        combinedWaterViewModel.getWaterGoal().observe(getViewLifecycleOwner(), waterGoalLiters -> {
+        userPointsViewModel = new ViewModelProvider(requireActivity()).get(UserPointsViewModel.class);
+
+
+        viewModel.getWaterGoal().observe(getViewLifecycleOwner(), waterGoalLiters -> {
             if (waterGoalLiters != null) {
                 goalView.setText(String.format(Locale.getDefault(), "Ваша цель: %.2f литра в день", waterGoalLiters));
             }
         });
 
-        combinedWaterViewModel.getCurrentVolume().observe(getViewLifecycleOwner(), volume -> {
+        viewModel.getCurrentVolume().observe(getViewLifecycleOwner(), volume -> {
             if (volume != null) {
                 finishedNumberOfWaterText.setText(String.format(Locale.getDefault(), "%.2f л", volume));
             }
         });
 
-        combinedWaterViewModel.getRemainingWaterGoal().observe(getViewLifecycleOwner(), remaining -> {
+        viewModel.getRemainingWaterGoal().observe(getViewLifecycleOwner(), remaining -> {
             if (remaining != null) {
                 leftNumberOfWaterText.setText(String.format(Locale.getDefault(), "%.2f л", remaining));
+                if (remaining <= 0) {
+                    updateWaterPointsIfNotAlreadyUpdated();
+                }
             }
         });
 
-        configureWaterButtons(view, combinedWaterViewModel);
+        configureWaterButtons(view, viewModel);
 
         return view;
     }
@@ -89,6 +93,7 @@ public class WaterFragment extends Fragment {
                 view.findViewById(R.id.addWaterBtn9),
                 view.findViewById(R.id.addWaterBtn10)
         };
+
         viewModel.getGlassesOfWater().observe(getViewLifecycleOwner(), glasses -> {
             for (int i = 0; i < buttons.length; i++) {
                 if (i < glasses) {
@@ -108,20 +113,17 @@ public class WaterFragment extends Fragment {
                     imgButton.setImageResource(R.drawable.full_glass);
                     imgButton.setTag("full");
                     updateWaterIntake(0.25);
-
                 } else {
                     imgButton.setImageResource(R.drawable.empty_glass);
                     imgButton.setTag("empty");
                     updateWaterIntake(-0.25);
-
                 }
             });
         }
-
     }
 
     private void updateWaterIntake(double volumeChange) {
-        CombinedWaterViewModel combinedWaterViewModel = new ViewModelProvider(requireActivity()).get(CombinedWaterViewModel.class);
+        CombinedWaterViewModel viewModel = new ViewModelProvider(requireActivity()).get(CombinedWaterViewModel.class);
 
         String dateString = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
@@ -131,30 +133,20 @@ public class WaterFragment extends Fragment {
                 .document(dateString);
 
         db.runTransaction((Transaction.Function<Void>) transaction -> {
-                    DocumentSnapshot snapshot = transaction.get(dateDocRef);
-                    double newVolume = volumeChange;
-                    if (snapshot.exists()) {
-                        Double currentVolume = snapshot.getDouble("volume");
-                        if (currentVolume != null) {
-                            newVolume += currentVolume;
-                        }
-                    }
-                    transaction.set(dateDocRef, new WaterIntakeModel(new Date(), newVolume));
-                    return null;
-                }).addOnSuccessListener(aVoid -> {
-                    Log.d("WaterFragment", "Успешно обновлено!");
-                    combinedWaterViewModel.updateWaterIntakeData(userId);
-                    checkAndUpdateWaterPoints(combinedWaterViewModel);
-                })
-                .addOnFailureListener(e -> Log.w("WaterFragment", "Ошибка обновления.", e));
-    }
-
-    private void checkAndUpdateWaterPoints(CombinedWaterViewModel viewModel) {
-        viewModel.getRemainingWaterGoal().observe(getViewLifecycleOwner(), remaining -> {
-            if (remaining != null && remaining <= 0) {
-                updateWaterPointsIfNotAlreadyUpdated();
+            DocumentSnapshot snapshot = transaction.get(dateDocRef);
+            double newVolume = volumeChange;
+            if (snapshot.exists()) {
+                Double currentVolume = snapshot.getDouble("volume");
+                if (currentVolume != null) {
+                    newVolume += currentVolume;
+                }
             }
-        });
+            transaction.set(dateDocRef, new WaterIntakeModel(new Date(), newVolume));
+            return null;
+        }).addOnSuccessListener(aVoid -> {
+            Log.d("WaterFragment", "Успешно обновлено!");
+            viewModel.updateWaterIntakeData(userId);
+        }).addOnFailureListener(e -> Log.w("WaterFragment", "Ошибка обновления.", e));
     }
 
     private void updateWaterPointsIfNotAlreadyUpdated() {
@@ -162,7 +154,7 @@ public class WaterFragment extends Fragment {
         SharedPreferences prefs = requireActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String lastUpdateDate = prefs.getString(LAST_UPDATE_KEY, "");
 
-        if (!todayDate.equals(lastUpdateDate) || lastUpdateDate == null ) {
+        if (!todayDate.equals(lastUpdateDate)) {
             DocumentReference userDocRef = db.collection("users").document(userId);
             db.runTransaction((Transaction.Function<Void>) transaction -> {
                         DocumentSnapshot snapshot = transaction.get(userDocRef);
@@ -181,4 +173,5 @@ public class WaterFragment extends Fragment {
                     .addOnFailureListener(e -> Log.w("WaterFragment", "Не удалось обновить очки за воду", e));
         }
     }
+
 }
