@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.listochek.model.PlantModel;
 import com.example.listochek.utils.FirebaseUtil;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,9 +35,9 @@ public class PlantViewModel extends ViewModel {
         return plant;
     }
 
-    private void loadPlantData(String userId) {
+    public Task<DocumentSnapshot> loadPlantData(String userId) {
         DocumentReference plantDocRef = db.collection("plants").document(userId);
-        plantDocRef.get().addOnCompleteListener(task -> {
+        return plantDocRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
@@ -58,7 +59,7 @@ public class PlantViewModel extends ViewModel {
         if (plantModel != null) {
             Log.d("PlantViewModel", "Watering plant");
             plantModel.setLastWatered(new Date());
-            plantModel.setWaterExperience(plantModel.getWaterExperience() + 100);
+            plantModel.setWaterExperience(plantModel.getWaterExperience() + 200);
             plant.setValue(plantModel);
             savePlantData(plantModel);
         }
@@ -69,8 +70,38 @@ public class PlantViewModel extends ViewModel {
         if (plantModel != null) {
             Log.d("PlantViewModel", "Fertilizing plant");
             plantModel.setLastFertilized(new Date());
-            plantModel.setFertilizerExperience(plantModel.getFertilizerExperience() + 100);
+            plantModel.setFertilizerExperience(plantModel.getFertilizerExperience() + 200);
             plant.setValue(plantModel);
+            savePlantData(plantModel);
+        }
+    }
+
+    public void updatePlantState() {
+        PlantModel plantModel = plant.getValue();
+        if (plantModel != null) {
+            long currentTime = new Date().getTime();
+            long lastWateredTime = plantModel.getLastWatered().getTime();
+            long lastFertilizedTime = plantModel.getLastFertilized().getTime();
+
+            Log.d("PlantViewModel", "Current Time: " + currentTime);
+            Log.d("PlantViewModel", "Last Watered Time: " + lastWateredTime);
+            Log.d("PlantViewModel", "Last Fertilized Time: " + lastFertilizedTime);
+
+            // Проверка времени с последнего полива
+            if (currentTime - lastWateredTime > 172800000) { // Более 48 часов
+                Log.d("PlantViewModel", "Watering time exceeded 48 hours");
+                plantModel.setWaterExperience(Math.max(0, plantModel.getWaterExperience() - 1000));
+                Log.d("PlantViewModel", "Updated Water Experience: " + plantModel.getWaterExperience());
+            }
+
+            // Проверка времени с последнего удобрения
+            if (currentTime - lastFertilizedTime > 172800000) { // Более 48 часов
+                Log.d("PlantViewModel", "Fertilizing time exceeded 48 hours");
+                plantModel.setFertilizerExperience(Math.max(0, plantModel.getFertilizerExperience() - 1000));
+                Log.d("PlantViewModel", "Updated Fertilizer Experience: " + plantModel.getFertilizerExperience());
+            }
+
+            mainHandler.post(() -> plant.setValue(plantModel));
             savePlantData(plantModel);
         }
     }
@@ -85,33 +116,9 @@ public class PlantViewModel extends ViewModel {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                Log.d("PlantViewModel", "TimerTask running");
                 updatePlantState();
             }
         }, 0, 86400000); // Обновление состояния каждые 24 часа
-    }
-
-    private void updatePlantState() {
-        PlantModel plantModel = plant.getValue();
-        if (plantModel != null) {
-            long currentTime = new Date().getTime();
-            long lastWateredTime = plantModel.getLastWatered().getTime();
-            long lastFertilizedTime = plantModel.getLastFertilized().getTime();
-
-            // Проверка времени с последнего полива
-            if (currentTime - lastWateredTime > 172800000) { // Более 48 часов
-                plantModel.setWaterLevel(plantModel.getWaterLevel() - 1);
-                plantModel.setWaterExperience(plantModel.getWaterExperience() - 200);
-            }
-
-            // Проверка времени с последнего удобрения
-            if (currentTime - lastFertilizedTime > 172800000) { // Более 48 часов
-                plantModel.setFertilizerLevel(plantModel.getFertilizerLevel() - 1);
-                plantModel.setFertilizerExperience(plantModel.getFertilizerExperience() - 200);
-            }
-
-            // Обновляем LiveData в главном потоке
-            mainHandler.post(() -> plant.setValue(plantModel));
-            savePlantData(plantModel);
-        }
     }
 }

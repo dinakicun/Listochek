@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.listochek.utils.FirebaseUtil;
 import com.example.listochek.utils.NutritionCalculator;
 import com.example.listochek.utils.NutritionViewModel;
+import com.example.listochek.utils.PlantViewModel;
 import com.example.listochek.utils.UserPointsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -26,12 +27,13 @@ public class HomePage extends AppCompatActivity {
     ImageButton userButton;
     TextView waterPointsText;
     TextView foodPointsText;
-
+    TextView levelText;
     HomeFragment homeFragment;
     WaterFragment waterFragment;
     CaloriesFragment caloriesFragment;
     String userId;
     UserPointsViewModel userPointsViewModel;
+    PlantViewModel plantViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,11 @@ public class HomePage extends AppCompatActivity {
         userButton = findViewById(R.id.main_user_btn);
         waterPointsText = findViewById(R.id.waterPointsText);
         foodPointsText = findViewById(R.id.foodPointsText);
+        levelText = findViewById(R.id.levelText);
         userId = FirebaseUtil.currentUserId();
 
         userPointsViewModel = new ViewModelProvider(this).get(UserPointsViewModel.class);
+        plantViewModel = new ViewModelProvider(this).get(PlantViewModel.class);
 
         userButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +71,12 @@ public class HomePage extends AppCompatActivity {
                             .commit();
                     return true;
                 } else if (item.getItemId() == R.id.menu_home) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, homeFragment).commit();
+                    plantViewModel.getPlant().observe(HomePage.this, plantModel -> {
+                        homeFragment.setPlantLevel(plantModel.getPlantLevel());
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_frame_layout, homeFragment)
+                                .commit();
+                    });
                     return true;
                 } else if (item.getItemId() == R.id.menu_calories) {
                     NutritionViewModel nutritionViewModel = new ViewModelProvider(HomePage.this).get(NutritionViewModel.class);
@@ -94,7 +103,7 @@ public class HomePage extends AppCompatActivity {
             }
         });
 
-        bottomNavigationView.setSelectedItemId(R.id.menu_calories);
+        bottomNavigationView.setSelectedItemId(R.id.menu_home);
 
         userPointsViewModel.getWaterPoints().observe(this, waterPoints -> {
             if (waterPoints != null) {
@@ -108,8 +117,21 @@ public class HomePage extends AppCompatActivity {
             }
         });
 
+        plantViewModel.getPlant().observe(this, plantModel -> {
+            if (plantModel != null) {
+                levelText.setText(String.valueOf(plantModel.getPlantLevel()));
+            }
+        });
+
         userPointsViewModel.loadUserPoints(userId);
         getFCMToken();
+
+        // Обновление состояния растения при входе в приложение
+        plantViewModel.loadPlantData(userId).addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                plantViewModel.updatePlantState();
+            }
+        });
     }
 
     void getFCMToken() {

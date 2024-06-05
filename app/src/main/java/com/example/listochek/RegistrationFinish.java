@@ -134,12 +134,10 @@ public class RegistrationFinish extends AppCompatActivity {
     void savePlantDetails(String userId) {
         Date currentDate = new Date();
         PlantModel plantModel = new PlantModel();
-        plantModel.setWaterLevel(1);
-        plantModel.setFertilizerLevel(1);
         plantModel.setLastWatered(currentDate);
         plantModel.setLastFertilized(currentDate);
-        plantModel.setWaterExperience(100);
-        plantModel.setFertilizerExperience(100);
+        plantModel.setWaterExperience(1000);
+        plantModel.setFertilizerExperience(1000);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("plants").document(userId).set(plantModel)

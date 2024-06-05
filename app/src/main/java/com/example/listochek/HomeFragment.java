@@ -19,6 +19,7 @@ public class HomeFragment extends Fragment {
     private ImageButton hydrateBtn, fertilizeBtn;
     private com.example.listochek.utils.PlantViewModel plantViewModel;
     private UserPointsViewModel userPointsViewModel;
+    private int plantLevel;
 
     public HomeFragment() {
     }
@@ -33,6 +34,9 @@ public class HomeFragment extends Fragment {
         fertilizeBtn = view.findViewById(R.id.fertilizeBtn);
         plantViewModel = new ViewModelProvider(requireActivity()).get(com.example.listochek.utils.PlantViewModel.class);
         userPointsViewModel = new ViewModelProvider(requireActivity()).get(UserPointsViewModel.class);
+
+        // Обновляем изображение на основе уровня растения
+        updatePlantImage(plantLevel);
 
         hydrateBtn.setOnClickListener(v -> {
             if (userPointsViewModel.getWaterPoints().getValue() > 0) {
@@ -49,5 +53,27 @@ public class HomeFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void setPlantLevel(int level) {
+        this.plantLevel = level;
+        if (plantImage != null) {
+            updatePlantImage(level);
+        }
+    }
+
+    private void updatePlantImage(int level) {
+        switch (level) {
+            case 1:
+                plantImage.setImageResource(R.drawable.plant_level_1);
+                break;
+            case 2:
+                plantImage.setImageResource(R.drawable.plant_level_2);
+                break;
+            // добавьте больше уровней по мере необходимости
+            default:
+                plantImage.setImageResource(R.drawable.plant);
+                break;
+        }
     }
 }

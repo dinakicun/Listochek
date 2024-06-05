@@ -3,37 +3,32 @@ package com.example.listochek.model;
 import java.util.Date;
 
 public class PlantModel {
-    private int waterLevel;
-    private int fertilizerLevel;
-    private Date lastWatered;
-    private Date lastFertilized;
     private int waterExperience;
     private int fertilizerExperience;
+    private Date lastWatered;
+    private Date lastFertilized;
 
-    // Конструктор, геттеры и сеттеры
     public PlantModel() {
-        this.waterLevel = 0;
-        this.fertilizerLevel = 0;
-        this.lastWatered = new Date();
-        this.lastFertilized = new Date();
         this.waterExperience = 0;
         this.fertilizerExperience = 0;
+        this.lastWatered = new Date();
+        this.lastFertilized = new Date();
     }
 
-    public int getWaterLevel() {
-        return waterLevel;
+    public int getWaterExperience() {
+        return waterExperience;
     }
 
-    public void setWaterLevel(int waterLevel) {
-        this.waterLevel = waterLevel;
+    public void setWaterExperience(int waterExperience) {
+        this.waterExperience = waterExperience;
     }
 
-    public int getFertilizerLevel() {
-        return fertilizerLevel;
+    public int getFertilizerExperience() {
+        return fertilizerExperience;
     }
 
-    public void setFertilizerLevel(int fertilizerLevel) {
-        this.fertilizerLevel = fertilizerLevel;
+    public void setFertilizerExperience(int fertilizerExperience) {
+        this.fertilizerExperience = fertilizerExperience;
     }
 
     public Date getLastWatered() {
@@ -52,19 +47,17 @@ public class PlantModel {
         this.lastFertilized = lastFertilized;
     }
 
-    public int getWaterExperience() {
-        return waterExperience;
+    public int getWaterLevel() {
+        return waterExperience / 1000;
     }
 
-    public void setWaterExperience(int waterExperience) {
-        this.waterExperience = waterExperience;
+    public int getFertilizerLevel() {
+        return fertilizerExperience / 1000;
     }
 
-    public int getFertilizerExperience() {
-        return fertilizerExperience;
-    }
-
-    public void setFertilizerExperience(int fertilizerExperience) {
-        this.fertilizerExperience = fertilizerExperience;
+    public int getPlantLevel() {
+        int waterLevel = getWaterLevel();
+        int fertilizerLevel = getFertilizerLevel();
+        return Math.min(waterLevel, fertilizerLevel);
     }
 }
