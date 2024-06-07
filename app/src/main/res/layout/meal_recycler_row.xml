@@ -55,6 +55,5 @@
                 android:textSize="15dp"
                 android:layout_marginRight="20dp">
             </TextView>
-<!--            <include layout="@layout/add_button_view"></include>-->
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,9 @@ package com.example.listochek;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -53,12 +55,23 @@ public class Authorization1 extends AppCompatActivity {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                String userId = FirebaseUtil.currentUserId();
                 if (task.isSuccessful()) {
                     userModel = task.getResult().toObject(UserModel.class);
                     if (userModel != null) {
-                        Intent intent = new Intent(Authorization1.this, Authorization2.class);
-                        startActivity(intent);
-                    } else if (userModel == null) {
+                        if ("admin".equals(userModel.getRole())) {
+                            SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("user_id", userId);
+                            editor.putString("role", "admin");
+                            editor.apply();
+                            Intent intent = new Intent(Authorization1.this, AdminMainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(Authorization1.this, Authorization2.class);
+                            startActivity(intent);
+                        }
+                    } else {
                         Intent intent = new Intent(Authorization1.this, Registration3.class);
                         startActivity(intent);
                     }
@@ -66,6 +79,7 @@ public class Authorization1 extends AppCompatActivity {
             }
         });
     }
+
     private void loginUser() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();

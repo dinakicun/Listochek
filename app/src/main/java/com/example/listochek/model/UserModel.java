@@ -11,6 +11,7 @@ public class UserModel {
     private Boolean activeLS;
     private Integer foodPoints;
     private Integer waterPoints;
+    private String role;  // Добавленное поле для роли пользователя
 
     public UserModel() {
     }
@@ -25,7 +26,9 @@ public class UserModel {
         this.activeLS = activeLS;
         this.foodPoints = 1;
         this.waterPoints = 1;
+        this.role = "user";
     }
+
     public String getEmail() {
         return email;
     }
@@ -96,5 +99,13 @@ public class UserModel {
 
     public void setWaterPoints(Integer waterPoints) {
         this.waterPoints = waterPoints;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

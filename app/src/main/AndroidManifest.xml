@@ -13,14 +13,19 @@
         android:theme="@style/Theme.Listochek"
         tools:targetApi="31">
         <activity
-            android:name=".SelectASnack"
+            android:name=".AdminAddDish"
             android:exported="false" />
         <activity
-            android:name=".SelectADinner"
+            android:name=".EditMealActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectALunch"
+            android:name=".AllDishes"
             android:exported="false" />
+        <activity
+            android:name=".AdminMainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_admin_main"
+            android:theme="@style/Theme.Listochek" />
         <activity
             android:name=".AddDish"
             android:exported="false" />

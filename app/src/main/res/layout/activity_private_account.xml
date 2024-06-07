@@ -158,7 +158,6 @@
                 android:layout_height="30dp"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/arrow">
-
             </ImageView>
         </LinearLayout>
 
@@ -172,7 +171,7 @@
         </com.google.android.material.divider.MaterialDivider>
 
         <LinearLayout
-            android:id="@+id/aboutLL"
+            android:id="@+id/myDishesLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -182,7 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="О нас"
+                android:text="Мои блюда"
                 android:textSize="20dp"></TextView>
 
             <ImageView
