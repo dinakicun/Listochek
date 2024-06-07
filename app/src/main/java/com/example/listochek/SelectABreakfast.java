@@ -28,7 +28,6 @@ import com.google.firebase.firestore.SetOptions;
 
 import androidx.core.view.GestureDetectorCompat;
 
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.LinearLayout;
@@ -118,6 +117,7 @@ public class SelectABreakfast extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SelectABreakfast.this, AddDish.class);
+                intent.putExtra("returnPage", "SelectABreakfast");
                 startActivity(intent);
             }
         });
@@ -181,7 +181,6 @@ public class SelectABreakfast extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 selectedDishes.remove(meal);
                 selectedDishesLayout.removeView(dishLayout);
             }
@@ -211,28 +210,8 @@ public class SelectABreakfast extends AppCompatActivity {
 
     // Функция поиска блюд по полю с названием блюда маленького регистра
     private void filterMeals(String text) {
-//        Query query;
-//        if (text.isEmpty()) {
-//            query = FirebaseUtil.allMealsCollectionReference();
-//        } else {
-//            String searchText = text.toLowerCase();  // Приведение текста к нижнему регистру
-//            query = FirebaseUtil.allMealsCollectionReference()
-//                    .orderBy("nameToLower")
-//                    .startAt(searchText)
-//                    .endAt(searchText + "\uf8ff");
-//        }
-//        FirestoreRecyclerOptions<MealModel> options = new FirestoreRecyclerOptions.Builder<MealModel>()
-//                .setQuery(query, MealModel.class).build();
-//
-//        if (adapter != null) {
-//            adapter.stopListening();
-//        }
-//        adapter = new MealRecyclerAdapter(options, getApplicationContext());
-//        meal_rv.setAdapter(adapter);
-//        adapter.startListening();
+        // Необходимо реализовать функцию поиска
     }
-
-
 
     void setupMealRecyclerView(){
         if (system_view){
@@ -247,7 +226,6 @@ public class SelectABreakfast extends AppCompatActivity {
             adapter.startListening();
         }
         else {
-
             Query query = FirebaseUtil.userMealsCollectionReference();
 
             FirestoreRecyclerOptions<MealModel> options = new FirestoreRecyclerOptions.Builder<MealModel>()

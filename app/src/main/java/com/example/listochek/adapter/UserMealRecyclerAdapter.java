@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.listochek.R;
 import com.example.listochek.model.MealModel;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -16,12 +17,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import android.util.Log;
 
-public class AdminMealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel, AdminMealRecyclerAdapter.MealViewHolder> {
+public class UserMealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel, UserMealRecyclerAdapter.MealViewHolder> {
     private Context context;
     private OnMealListener listener;
-    private static final String TAG = "AdminMealRecyclerAdapter";
+    private static final String TAG = "UserMealRecyclerAdapter";
 
-    public AdminMealRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MealModel> options, Context context) {
+    public UserMealRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MealModel> options, Context context) {
         super(options);
         this.context = context;
     }
@@ -29,9 +30,23 @@ public class AdminMealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel
     @Override
     protected void onBindViewHolder(@NonNull MealViewHolder holder, int position, @NonNull MealModel model) {
         Log.d(TAG, "Binding view holder at position " + position);
-        holder.mealNameText.setText(model.getName() != null ? model.getName() : "");
-        holder.mealWeightText.setText(model.getWeight() != null ? model.getWeight() + " г" : "");
-        holder.mealCaloriesText.setText(model.getCalories() != null ? model.getCalories() + " ккал" : "");
+        if (model.getName() != null) {
+            holder.mealNameText.setText(model.getName());
+        } else {
+            holder.mealNameText.setText("");
+        }
+
+        if (model.getWeight() != null) {
+            holder.mealWeightText.setText(model.getWeight() + " г");
+        } else {
+            holder.mealWeightText.setText("");
+        }
+
+        if (model.getCalories() != null) {
+            holder.mealCaloriesText.setText(model.getCalories() + " ккал");
+        } else {
+            holder.mealCaloriesText.setText("");
+        }
 
         holder.itemView.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
@@ -40,16 +55,23 @@ public class AdminMealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel
             }
         });
 
-        holder.deleteButton.setOnClickListener(v -> new AlertDialog.Builder(context)
-                .setTitle("Удалить блюдо")
-                .setMessage("Вы уверены, что хотите удалить это блюдо?")
-                .setPositiveButton("Да", (dialog, which) -> FirebaseFirestore.getInstance().collection("meal")
-                        .document(model.getId())
-                        .delete()
-                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Блюдо удалено"))
-                        .addOnFailureListener(e -> Log.w(TAG, "Ошибка при удалении блюда", e)))
-                .setNegativeButton("Нет", null)
-                .show());
+        holder.deleteButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(context)
+                    .setTitle("Удалить блюдо")
+                    .setMessage("Вы уверены, что хотите удалить это блюдо?")
+                    .setPositiveButton("Да", (dialog, which) -> {
+                        FirebaseFirestore.getInstance().collection("meal")
+                                .document(model.getId())
+                                .delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d(TAG, "Блюдо удалено");
+                                    notifyItemRemoved(holder.getAdapterPosition());
+                                })
+                                .addOnFailureListener(e -> Log.w(TAG, "Ошибка при удалении блюда", e));
+                    })
+                    .setNegativeButton("Нет", null)
+                    .show();
+        });
     }
 
     @NonNull

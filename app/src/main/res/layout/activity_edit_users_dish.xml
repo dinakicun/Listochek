@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditUsersDish"
+    android:background="#FFFFFF">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/backText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="25dp"
+                android:text="Измените блюдо"
+                android:textAlignment="center"
+                android:textSize="30dp"
+                android:textStyle="normal"/>
+
+            <LinearLayout
+                android:id="@+id/nameLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Название блюда:"
+                    android:textSize="18dp"
+                    android:textStyle="normal"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="15dp"/>
+
+                <EditText
+                    android:id="@+id/editTextName"
+                    android:layout_width="340dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="10dp"
+                    android:layout_gravity="left"
+                    android:inputType="textPersonName"
+                    android:layout_marginStart="10dp">
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/weightLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/weightTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Граммовка блюда:"
+                    android:textSize="18dp"
+                    android:textStyle="normal"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="15dp"/>
+
+                <EditText
+                    android:id="@+id/editTextWeight"
+                    android:layout_width="340dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="10dp"
+                    android:layout_gravity="left"
+                    android:inputType="number"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/caloriesLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/caloriesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Количество калорий:"
+                    android:textSize="18dp"
+                    android:textStyle="normal"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="15dp"/>
+
+                <EditText
+                    android:id="@+id/editTextCalories"
+                    android:layout_width="340dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="10dp"
+                    android:layout_gravity="left"
+                    android:inputType="number"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/proteinsLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/proteinTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Количество белков:"
+                    android:textSize="18dp"
+                    android:textStyle="normal"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="15dp"/>
+
+                <EditText
+                    android:id="@+id/editTextProtein"
+                    android:layout_width="340dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="10dp"
+                    android:layout_gravity="left"
+                    android:inputType="number"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fatsLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/fatsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Количество жиров:"
+                    android:textSize="18dp"
+                    android:textStyle="normal"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="15dp"/>
+
+                <EditText
+                    android:id="@+id/editTextFats"
+                    android:layout_width="340dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="10dp"
+                    android:layout_gravity="left"
+                    android:inputType="number"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/carbohydratesLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/carbohydratesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Количество углеводов:"
+                    android:textSize="18dp"
+                    android:textStyle="normal"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="15dp"/>
+
+                <EditText
+                    android:id="@+id/editTextCarbs"
+                    android:layout_width="340dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="10dp"
+                    android:layout_gravity="left"
+                    android:inputType="number"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSave"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:text="Сохранить"
+                app:backgroundTint="#B1E996"
+                android:layout_gravity="center"
+                android:background="@drawable/button_corner"
+                app:cornerRadius="15dp"
+                android:textSize="20dp"
+                android:layout_margin="15dp"/>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -66,6 +66,8 @@ public class Authorization1 extends AppCompatActivity {
                             editor.putString("role", "admin");
                             editor.apply();
                             Intent intent = new Intent(Authorization1.this, AdminMainActivity.class);
+                            intent.putExtra("name", userModel.getName());
+                            intent.putExtra("email", userModel.getEmail());
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(Authorization1.this, Authorization2.class);
@@ -79,6 +81,7 @@ public class Authorization1 extends AppCompatActivity {
             }
         });
     }
+
 
     private void loginUser() {
         String email = emailEditText.getText().toString().trim();

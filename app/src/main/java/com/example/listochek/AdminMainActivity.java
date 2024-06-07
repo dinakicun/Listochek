@@ -49,6 +49,7 @@ public class AdminMainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         dishes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

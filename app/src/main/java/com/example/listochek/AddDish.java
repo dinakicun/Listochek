@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class AddDish extends AppCompatActivity {
     private EditText nameText, weightText, caloriesText, proteinText, fatsText, carbohydratesText;
     private FirebaseFirestore db;
+    private String returnPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,8 @@ public class AddDish extends AppCompatActivity {
         proteinText = findViewById(R.id.proteinText);
         fatsText = findViewById(R.id.fatsText);
         carbohydratesText = findViewById(R.id.carbohydratesText);
+
+        returnPage = getIntent().getStringExtra("returnPage");
 
         findViewById(R.id.save).setOnClickListener(v -> saveDish());
     }
@@ -74,7 +77,12 @@ public class AddDish extends AppCompatActivity {
         db.collection("meal").document("usersMeal").collection(userId).document(documentId).set(meal)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Блюдо успешно добавлено!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AddDish.this, CaloriesFragment.class);
+                    Intent intent;
+                    if ("SelectABreakfast".equals(returnPage)) {
+                        intent = new Intent(AddDish.this, SelectABreakfast.class);
+                    } else {
+                        intent = new Intent(AddDish.this, UsersDishes.class);
+                    }
                     startActivity(intent);
                     finish();
                 })
