@@ -22,7 +22,7 @@ import androidx.core.view.GestureDetectorCompat;
 
 public class PrivateAccount extends AppCompatActivity {
     private TextView nameText, ageText, weightText, heightText, caloriesText;
-    private LinearLayout changeData, exit, myDishes;
+    private LinearLayout changeData, exit, myDishes, reminders;
     private GestureDetectorCompat gestureDetectorCompat;
 
     private static final String PREFS_NAME = "WaterPrefs";
@@ -43,12 +43,22 @@ public class PrivateAccount extends AppCompatActivity {
         changeData = findViewById(R.id.changeDataLL);
         exit = findViewById(R.id.exitLL);
         myDishes = findViewById(R.id.myDishesLL);
+        reminders = findViewById(R.id.remindersLL);
         loadUserData();
 
         changeData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PrivateAccount.this, ChangePersonalData.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
+        });
+        reminders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PrivateAccount.this, ReminderList.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }

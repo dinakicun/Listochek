@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Listochek"
         tools:targetApi="31">
+        <activity
+            android:name=".ReminderList"
+            android:exported="false" />
+
+        <receiver android:name=".ReminderReceiver" />
+
         <activity
             android:name=".EditUsersDish"
             android:exported="false" />
@@ -40,7 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".AddReminder"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ChangePersonalData"
             android:exported="false" />
@@ -76,12 +86,6 @@
             android:exported="false" />
         <activity
             android:name=".Registration4"
-            android:exported="false" />
-        <activity
-            android:name=".Registration3"
-            android:exported="false" />
-        <activity
-            android:name=".Registration2"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
