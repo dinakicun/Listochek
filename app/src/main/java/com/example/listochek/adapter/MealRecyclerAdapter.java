@@ -27,31 +27,14 @@ public class MealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel, Mea
 
     @Override
     protected void onBindViewHolder(@NonNull MealViewHolder holder, int position, @NonNull MealModel model) {
-        if (model.getName() != null) {
-            holder.mealNameText.setText(model.getName());
-        } else {
-            holder.mealNameText.setText("");
-        }
+        holder.mealNameText.setText(model.getName());
+        holder.mealWeightText.setText(model.getWeight() + " г");
+        holder.mealCaloriesText.setText(model.getCalories() + " ккал");
 
-        if (model.getWeight() != null) {
-            holder.mealWeightText.setText(model.getWeight() + " г");
-        } else {
-            holder.mealWeightText.setText("");
-        }
-
-        if (model.getCalories() != null) {
-            holder.mealCaloriesText.setText(model.getCalories() + " ккал");
-        } else {
-            holder.mealCaloriesText.setText("");
-        }
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int adapterPosition = holder.getAdapterPosition();
-                if (listener != null && adapterPosition != RecyclerView.NO_POSITION) {
-                    listener.onMealClick(getItem(adapterPosition));
-                }
+        holder.itemView.setOnClickListener(v -> {
+            int adapterPosition = holder.getAdapterPosition();
+            if (listener != null && adapterPosition != RecyclerView.NO_POSITION) {
+                listener.onMealClick(getItem(adapterPosition));
             }
         });
     }

@@ -38,7 +38,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
-                android:text="Завтрак"
+                android:text="Прием пищи"
                 android:textAlignment="center"
                 android:textSize="30dp"
                 android:textStyle="normal" />

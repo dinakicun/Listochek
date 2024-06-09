@@ -5,15 +5,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.listochek.adapter.ReminderAdapter;
 import com.example.listochek.model.ReminderModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +26,7 @@ import java.util.List;
 public class ReminderList extends AppCompatActivity {
 
     private RecyclerView reminderRecyclerView;
-    private com.example.listochek.adapter.ReminderAdapter reminderAdapter;
+    private ReminderAdapter reminderAdapter;
     private List<ReminderModel> reminderList;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -44,7 +43,7 @@ public class ReminderList extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         reminderList = new ArrayList<>();
-        reminderAdapter = new com.example.listochek.adapter.ReminderAdapter(reminderList, this::deleteReminder);
+        reminderAdapter = new ReminderAdapter(reminderList, this::deleteReminder);
         reminderRecyclerView.setAdapter(reminderAdapter);
 
         addReminder = findViewById(R.id.addReminderBtn);
@@ -109,7 +108,6 @@ public class ReminderList extends AppCompatActivity {
                     .addOnFailureListener(e -> Toast.makeText(ReminderList.this, "Ошибка удаления напоминания", Toast.LENGTH_SHORT).show());
         }
     }
-
 
     private void cancelAlarm(ReminderModel reminder) {
         Intent intent = new Intent(this, ReminderReceiver.class);

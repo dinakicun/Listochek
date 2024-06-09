@@ -8,13 +8,17 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/plantwindow" />
+        android:src="@drawable/plantwindow"
+         />
 
     <LinearLayout
+        android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:paddingHorizontal="20dp"
+        android:layout_alignParentTop="true">
 
         <ImageButton
             android:id="@+id/hydrateBtn"
@@ -23,8 +27,7 @@
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/waterplant"
-            android:layout_marginRight="10dp">
-        </ImageButton>
+            android:layout_marginRight="10dp" />
 
         <ImageButton
             android:id="@+id/fertilizeBtn"
@@ -33,16 +36,17 @@
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/foodplant"
-            android:layout_marginLeft="10dp">
-        </ImageButton>
+            android:layout_marginLeft="10dp" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/plantImage"
+        android:layout_marginBottom="170dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_height="match_parent"
+        android:layout_below="@id/buttonContainer"
         android:layout_alignParentBottom="true"
+        android:scaleType="fitCenter"
         android:src="@drawable/plant" />
 
 </RelativeLayout>

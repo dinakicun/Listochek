@@ -26,8 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 
-import androidx.core.view.GestureDetectorCompat;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.LinearLayout;
@@ -48,11 +46,9 @@ public class SelectABreakfast extends AppCompatActivity {
     Button saveBtn, systemBtn, userBtn;
     ImageButton addDish;
     TextView typeOfDishText;
-    private GestureDetectorCompat gestureDetectorCompat;
     boolean system_view = true;
-    private boolean isViewButtonSelected = true;
     List<MealModel> selectedDishes = new ArrayList<>();
-    //поменять название и текст "Завтрак"
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,68 +72,59 @@ public class SelectABreakfast extends AppCompatActivity {
         addDish = findViewById(R.id.addDishBtn);
         systemBtn = findViewById(R.id.systemButton);
         userBtn = findViewById(R.id.usersButton);
-        if (system_view == true){
+        saveBtn = findViewById(R.id.saveBtn);
+
+        setUpButtons();
+        setupMealRecyclerView();
+        setupSearchBar();
+    }
+
+    private void setUpButtons() {
+        if (system_view) {
             ((MaterialButton) systemBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#B1E996")));
             ((MaterialButton) userBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#E5E3E1")));
         }
-        userBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                system_view = false;
-                ((MaterialButton) userBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#B1E996")));
-                ((MaterialButton) systemBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#E5E3E1")));
-                isViewButtonSelected = true;
-                setupMealRecyclerView();
-                adapter.setOnMealListener(new MealRecyclerAdapter.OnMealListener() {
-                    @Override
-                    public void onMealClick(MealModel meal) {
-                        updateSelectedDishes(meal);
-                    }
-                });
-            }
+
+        userBtn.setOnClickListener(v -> {
+            system_view = false;
+            updateButtonStyles();
+            setupMealRecyclerView();
         });
 
-        systemBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                system_view = true;
-                ((MaterialButton) systemBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#B1E996")));
-                ((MaterialButton) userBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#E5E3E1")));
-                isViewButtonSelected = true;
-                setupMealRecyclerView();
-                adapter.setOnMealListener(new MealRecyclerAdapter.OnMealListener() {
-                    @Override
-                    public void onMealClick(MealModel meal) {
-                        updateSelectedDishes(meal);
-                    }
-                });
-            }
+        systemBtn.setOnClickListener(v -> {
+            system_view = true;
+            updateButtonStyles();
+            setupMealRecyclerView();
         });
-        addDish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SelectABreakfast.this, AddDish.class);
-                intent.putExtra("returnPage", "SelectABreakfast");
+
+        addDish.setOnClickListener(v -> {
+            Intent intent = new Intent(SelectABreakfast.this, AddDish.class);
+            intent.putExtra("returnPage", "SelectABreakfast");
+            startActivity(intent);
+        });
+
+        saveBtn.setOnClickListener(v -> {
+            if (selectedDishes.isEmpty()) {
+                Intent intent = new Intent(SelectABreakfast.this, HomePage.class);
                 startActivity(intent);
-            }
-        });
-        saveBtn = findViewById(R.id.saveBtn);
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            } else {
+                String userId = FirebaseUtil.currentUserId();
+                String type = getIntent().getExtras().getString("type");
                 saveMeal(userId, type, selectedDishes);
                 Intent intent = new Intent(SelectABreakfast.this, HomePage.class);
                 startActivity(intent);
             }
         });
-        setupMealRecyclerView();
-        setupSearchBar();
-        adapter.setOnMealListener(new MealRecyclerAdapter.OnMealListener() {
-            @Override
-            public void onMealClick(MealModel meal) {
-                updateSelectedDishes(meal);
-            }
-        });
+    }
+
+    private void updateButtonStyles() {
+        if (system_view) {
+            ((MaterialButton) systemBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#B1E996")));
+            ((MaterialButton) userBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#E5E3E1")));
+        } else {
+            ((MaterialButton) userBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#B1E996")));
+            ((MaterialButton) systemBtn).setStrokeColor(ColorStateList.valueOf(Color.parseColor("#E5E3E1")));
+        }
     }
 
     public void saveMeal(String userId, String mealType, List<MealModel> selectedDishes) {
@@ -146,8 +133,8 @@ public class SelectABreakfast extends AppCompatActivity {
         List<Map<String, Object>> dishesToSave = new ArrayList<>();
         for (MealModel dish : selectedDishes) {
             Map<String, Object> dishMap = new HashMap<>();
-            dishMap.put("id", UUID.randomUUID().toString()); // Добавляем уникальный идентификатор
-            dishMap.put("mealId", dish.getId()); // Добавляем идентификатор блюда
+            dishMap.put("id", UUID.randomUUID().toString());
+            dishMap.put("mealId", dish.getId());
 
             dishesToSave.add(dishMap);
         }
@@ -178,12 +165,9 @@ public class SelectABreakfast extends AppCompatActivity {
         weightTextView.setText(meal.getWeight() + " г");
         caloriesTextView.setText(meal.getCalories() + " ккал");
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedDishes.remove(meal);
-                selectedDishesLayout.removeView(dishLayout);
-            }
+        deleteButton.setOnClickListener(v -> {
+            selectedDishes.remove(meal);
+            selectedDishesLayout.removeView(dishLayout);
         });
 
         selectedDishes.add(meal);
@@ -199,7 +183,7 @@ public class SelectABreakfast extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterMeals(s.toString());
+                filterMeals(s.toString().toLowerCase());
             }
 
             @Override
@@ -208,40 +192,52 @@ public class SelectABreakfast extends AppCompatActivity {
         });
     }
 
-    // Функция поиска блюд по полю с названием блюда маленького регистра
     private void filterMeals(String text) {
-        // Необходимо реализовать функцию поиска
+//        Query query;
+//        if (system_view) {
+//            query = FirebaseUtil.allMealsCollectionReference()
+//                    .whereGreaterThanOrEqualTo("nameToLower", text)
+//                    .whereLessThanOrEqualTo("nameToLower", text + '\uf8ff');
+//        } else {
+//            query = FirebaseUtil.userMealsCollectionReference()
+//                    .whereGreaterThanOrEqualTo("nameToLower", text)
+//                    .whereLessThanOrEqualTo("nameToLower", text + '\uf8ff');
+//        }
+//
+//        FirestoreRecyclerOptions<MealModel> options = new FirestoreRecyclerOptions.Builder<MealModel>()
+//                .setQuery(query, MealModel.class).build();
+//
+//        if (adapter != null) {
+//            adapter.updateOptions(options);
+//        }
     }
 
-    void setupMealRecyclerView(){
-        if (system_view){
-            Query query = FirebaseUtil.allMealsCollectionReference();
-
-            FirestoreRecyclerOptions<MealModel> options = new FirestoreRecyclerOptions.Builder<MealModel>()
-                    .setQuery(query, MealModel.class).build();
-
-            adapter = new MealRecyclerAdapter(options, getApplicationContext());
-            meal_rv.setLayoutManager(new LinearLayoutManager(this));
-            meal_rv.setAdapter(adapter);
-            adapter.startListening();
+    void setupMealRecyclerView() {
+        Query query;
+        if (system_view) {
+            query = FirebaseUtil.allMealsCollectionReference();
+        } else {
+            query = FirebaseUtil.userMealsCollectionReference();
         }
-        else {
-            Query query = FirebaseUtil.userMealsCollectionReference();
 
-            FirestoreRecyclerOptions<MealModel> options = new FirestoreRecyclerOptions.Builder<MealModel>()
-                    .setQuery(query, MealModel.class).build();
+        FirestoreRecyclerOptions<MealModel> options = new FirestoreRecyclerOptions.Builder<MealModel>()
+                .setQuery(query, MealModel.class).build();
 
-            adapter = new MealRecyclerAdapter(options, getApplicationContext());
-            meal_rv.setLayoutManager(new LinearLayoutManager(this));
-            meal_rv.setAdapter(adapter);
-            adapter.startListening();
+        if (adapter != null) {
+            adapter.stopListening();
         }
+
+        adapter = new MealRecyclerAdapter(options, getApplicationContext());
+        meal_rv.setLayoutManager(new LinearLayoutManager(this));
+        meal_rv.setAdapter(adapter);
+        adapter.startListening();
+        adapter.setOnMealListener(meal -> updateSelectedDishes(meal));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(adapter != null){
+        if (adapter != null) {
             adapter.startListening();
         }
     }
@@ -249,7 +245,7 @@ public class SelectABreakfast extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(adapter != null){
+        if (adapter != null) {
             adapter.stopListening();
         }
     }
@@ -257,7 +253,7 @@ public class SelectABreakfast extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(adapter != null){
+        if (adapter != null) {
             adapter.startListening();
         }
     }

@@ -3,6 +3,7 @@ package com.example.listochek.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         ReminderModel reminder = reminderList.get(position);
         holder.titleTextView.setText(reminder.getTitle());
         holder.timeTextView.setText(String.format("%02d:%02d", reminder.getHour(), reminder.getMinute()));
-        holder.itemView.setOnClickListener(v -> listener.onReminderClick(reminder));
+        holder.deleteReminderBtn.setOnClickListener(v -> listener.onReminderClick(reminder));
     }
 
     @Override
@@ -51,11 +52,13 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
 
         TextView titleTextView;
         TextView timeTextView;
+        ImageButton deleteReminderBtn;
 
         public ReminderViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.reminderTitleTextView);
             timeTextView = itemView.findViewById(R.id.reminderTimeTextView);
+            deleteReminderBtn = itemView.findViewById(R.id.deleteReminderBtn);
         }
     }
 }

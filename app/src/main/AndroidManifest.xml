@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Listochek"
         tools:targetApi="31">
         <activity
+            android:name=".MealDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ReminderList"
             android:exported="false" />
 
