@@ -17,6 +17,7 @@ import com.example.listochek.utils.NutritionCalculator;
 import com.example.listochek.utils.NutritionViewModel;
 import com.example.listochek.utils.PlantViewModel;
 import com.example.listochek.utils.UserPointsViewModel;
+import com.example.listochek.utils.CombinedWaterViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -34,6 +35,7 @@ public class HomePage extends AppCompatActivity {
     String userId;
     UserPointsViewModel userPointsViewModel;
     PlantViewModel plantViewModel;
+    CombinedWaterViewModel combinedWaterViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,53 +55,54 @@ public class HomePage extends AppCompatActivity {
 
         userPointsViewModel = new ViewModelProvider(this).get(UserPointsViewModel.class);
         plantViewModel = new ViewModelProvider(this).get(PlantViewModel.class);
+        combinedWaterViewModel = new ViewModelProvider(this).get(CombinedWaterViewModel.class);
 
-        userButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomePage.this, PrivateAccount.class);
-                startActivity(intent);
-            }
+        userButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePage.this, PrivateAccount.class);
+            startActivity(intent);
         });
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.menu_water) {
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.menu_water) {
+                combinedWaterViewModel.loadData(userId).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("HomePage", "Data for WaterFragment loaded successfully");
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_frame_layout, waterFragment)
+                                .commit();
+                    } else {
+                        Log.e("HomePage", "Failed to load data for WaterFragment", task.getException());
+                    }
+                });
+                return true;
+            } else if (item.getItemId() == R.id.menu_home) {
+                plantViewModel.getPlant().observe(HomePage.this, plantModel -> {
+                    homeFragment.setPlantLevel(plantModel.getPlantLevel());
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_frame_layout, new WaterFragment())
+                            .replace(R.id.main_frame_layout, homeFragment)
                             .commit();
-                    return true;
-                } else if (item.getItemId() == R.id.menu_home) {
-                    plantViewModel.getPlant().observe(HomePage.this, plantModel -> {
-                        homeFragment.setPlantLevel(plantModel.getPlantLevel());
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.main_frame_layout, homeFragment)
-                                .commit();
-                    });
-                    return true;
-                } else if (item.getItemId() == R.id.menu_calories) {
-                    NutritionViewModel nutritionViewModel = new ViewModelProvider(HomePage.this).get(NutritionViewModel.class);
+                });
+                return true;
+            } else if (item.getItemId() == R.id.menu_calories) {
+                NutritionViewModel nutritionViewModel = new ViewModelProvider(HomePage.this).get(NutritionViewModel.class);
+                nutritionViewModel.loadCharacteristics(userId);
 
-                    nutritionViewModel.loadCharacteristics(userId);
+                NutritionCalculator.sumDailyIntake(userId, () -> {
+                    int totalCalories = NutritionCalculator.getTotalCalories();
+                    int totalFats = NutritionCalculator.getTotalFats();
+                    int totalProtein = NutritionCalculator.getTotalProtein();
+                    int totalCarbohydrates = NutritionCalculator.getTotalCarbohydrates();
 
-                    NutritionCalculator.sumDailyIntake(userId, () -> {
-                        int totalCalories = NutritionCalculator.getTotalCalories();
-                        int totalFats = NutritionCalculator.getTotalFats();
-                        int totalProtein = NutritionCalculator.getTotalProtein();
-                        int totalCarbohydrates = NutritionCalculator.getTotalCarbohydrates();
+                    nutritionViewModel.setCalculatedValues(totalCalories, totalFats, totalProtein, totalCarbohydrates);
 
-                        nutritionViewModel.setCalculatedValues(totalCalories, totalFats, totalProtein, totalCarbohydrates);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_frame_layout, caloriesFragment)
+                            .commit();
+                });
 
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.main_frame_layout, new CaloriesFragment())
-                                .commit();
-                    });
-
-                    return true;
-                } else {
-                    return false;
-                }
+                return true;
+            } else {
+                return false;
             }
         });
 

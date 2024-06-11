@@ -35,7 +35,7 @@
             android:id="@+id/heightTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ваш рост 173 кг?"
+            android:text="Ваш рост     кг?"
             android:textSize="20dp"
             android:textStyle="normal"
             android:layout_gravity="center"

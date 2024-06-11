@@ -35,7 +35,7 @@
             android:id="@+id/weightTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ваш вес 55 кг?"
+            android:text="Ваш вес    кг?"
             android:textSize="20dp"
             android:textStyle="normal"
             android:layout_gravity="center"

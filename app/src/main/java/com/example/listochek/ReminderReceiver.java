@@ -30,7 +30,7 @@ public class ReminderReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("Listochek")
                 .setContentText(title)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

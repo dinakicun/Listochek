@@ -1,5 +1,7 @@
 package com.example.listochek.adapter;
 
+import static com.example.listochek.utils.FirebaseUtil.currentUserId;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,10 +63,13 @@ public class UserMealRecyclerAdapter extends FirestoreRecyclerAdapter<MealModel,
                     .setMessage("Вы уверены, что хотите удалить это блюдо?")
                     .setPositiveButton("Да", (dialog, which) -> {
                         FirebaseFirestore.getInstance().collection("meal")
+                                .document("usersMeal")
+                                .collection(currentUserId())
                                 .document(model.getId())
                                 .delete()
                                 .addOnSuccessListener(aVoid -> {
                                     Log.d(TAG, "Блюдо удалено");
+                                    // Уведомляем адаптер, что элемент удален
                                     notifyItemRemoved(holder.getAdapterPosition());
                                 })
                                 .addOnFailureListener(e -> Log.w(TAG, "Ошибка при удалении блюда", e));

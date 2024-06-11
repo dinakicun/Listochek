@@ -49,20 +49,20 @@ public class WaterFragment extends Fragment {
         TextView goalView = view.findViewById(R.id.goalView);
 
         userId = FirebaseUtil.currentUserId();
-        viewModel.loadData(userId);
 
         userPointsViewModel = new ViewModelProvider(requireActivity()).get(UserPointsViewModel.class);
-
 
         viewModel.getWaterGoal().observe(getViewLifecycleOwner(), waterGoalLiters -> {
             if (waterGoalLiters != null) {
                 goalView.setText(String.format(Locale.getDefault(), "Ваша цель: %.2f литра в день", waterGoalLiters));
+                viewModel.updateRemainingWaterGoal();
             }
         });
 
         viewModel.getCurrentVolume().observe(getViewLifecycleOwner(), volume -> {
             if (volume != null) {
                 finishedNumberOfWaterText.setText(String.format(Locale.getDefault(), "%.2f л", volume));
+                viewModel.updateRemainingWaterGoal();
             }
         });
 

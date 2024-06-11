@@ -111,27 +111,34 @@ public class HomeFragment extends Fragment {
         if (plantModel != null) {
             int waterExperience = plantModel.getWaterExperience();
             int fertilizerExperience = plantModel.getFertilizerExperience();
-            int waterLevel = plantModel.getWaterLevel();
-            int fertilizerLevel = plantModel.getFertilizerLevel();
 
             int maxExperience = 1000;
+            int plantLevel = plantModel.getPlantLevel();
 
-            int waterPoints = waterExperience % maxExperience;
-            if (waterPoints == 0 && waterExperience != 0) {
-                waterPoints = maxExperience;
+            int effectiveWaterPoints = waterExperience % maxExperience;
+            int effectiveFertilizerPoints = fertilizerExperience % maxExperience;
+
+
+            if (waterExperience >= plantLevel * maxExperience) {
+                effectiveWaterPoints = Math.min(maxExperience, waterExperience - (plantLevel * maxExperience));
             }
 
-            int fertilizerPoints = fertilizerExperience % maxExperience;
-            if (fertilizerPoints == 0 && fertilizerExperience != 0) {
-                fertilizerPoints = maxExperience;
+            if (fertilizerExperience >= plantLevel * maxExperience) {
+                effectiveFertilizerPoints = Math.min(maxExperience, fertilizerExperience - (plantLevel * maxExperience));
             }
 
-            String message = "Вода: " + waterPoints + "/" + maxExperience + "\n" +
-                    "Удобрение: " + fertilizerPoints + "/" + maxExperience;
+            effectiveWaterPoints = Math.min(maxExperience, effectiveWaterPoints);
+            effectiveFertilizerPoints = Math.min(maxExperience, effectiveFertilizerPoints);
+
+            String message = "Вода: " + effectiveWaterPoints + "/" + maxExperience + "\n" +
+                    "Удобрение: " + effectiveFertilizerPoints + "/" + maxExperience;
 
             Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
         }
     }
+
+
+
 
 
 }

@@ -145,8 +145,8 @@ public class AuthorizationFinish extends AppCompatActivity {
     void updateNutritionDetails(CharacteristicsModel nutrition) {
         FirebaseUtil.currentCharacteristicsDetails()
                 .set(nutrition)
-                .addOnSuccessListener(aVoid -> Toast.makeText(AuthorizationFinish.this, "Nutrition details updated successfully.", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(AuthorizationFinish.this, "Error updating nutrition details.", Toast.LENGTH_SHORT).show());
+                .addOnSuccessListener(aVoid -> Toast.makeText(AuthorizationFinish.this, "Данные были обновлены", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(AuthorizationFinish.this, "Ошибка обновления данных", Toast.LENGTH_SHORT).show());
     }
 
     void getUserActivity() {
