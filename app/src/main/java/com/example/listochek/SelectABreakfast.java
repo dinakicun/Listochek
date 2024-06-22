@@ -1,5 +1,6 @@
 package com.example.listochek;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -135,6 +136,7 @@ public class SelectABreakfast extends AppCompatActivity {
             Map<String, Object> dishMap = new HashMap<>();
             dishMap.put("id", UUID.randomUUID().toString());
             dishMap.put("mealId", dish.getId());
+            dishMap.put("factor", dish.getFactor()); // сохраняем factor
 
             dishesToSave.add(dishMap);
         }
@@ -151,27 +153,98 @@ public class SelectABreakfast extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error saving meal", e));
     }
 
+    private void showChangeWeightDialog(MealModel meal) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.dialog_change_weight, null);
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setView(dialogView);
+
+        EditText newWeightEditText = dialogView.findViewById(R.id.newWeightEditText);
+        newWeightEditText.setText(String.valueOf(meal.getWeight()));
+        Button changeWeightButton = dialogView.findViewById(R.id.changeWeightButton);
+
+        AlertDialog alertDialog = dialogBuilder.create();
+
+        changeWeightButton.setOnClickListener(v -> {
+            String newWeightStr = newWeightEditText.getText().toString();
+            int newWeight;
+            if (newWeightStr.isEmpty()) {
+                newWeight = meal.getWeight();
+            } else {
+                newWeight = Integer.parseInt(newWeightStr);
+            }
+            saveNewMealWithNewWeight(meal, newWeight);
+            alertDialog.dismiss();
+        });
+
+        alertDialog.show();
+    }
+
+    private void saveNewMealWithNewWeight(MealModel meal, int newWeight) {
+        double factor = (double) newWeight / meal.getWeight();
+        meal.setFactor(factor); // сохраняем factor в объекте MealModel
+        meal.setWeight(newWeight);
+        meal.setCalories((int) Math.round(meal.getCalories() * factor));
+        meal.setProtein((int) Math.round(meal.getProtein() * factor));
+        meal.setFats((int) Math.round(meal.getFats() * factor));
+        meal.setCarbohydrates((int) Math.round(meal.getCarbohydrates() * factor));
+
+        updateSelectedDishes(meal);
+    }
+
     private void updateSelectedDishes(MealModel meal) {
         LinearLayout selectedDishesLayout = findViewById(R.id.selectedDishesLayout);
         LayoutInflater inflater = LayoutInflater.from(this);
-        ConstraintLayout dishLayout = (ConstraintLayout) inflater.inflate(R.layout.selected_dish_layout, selectedDishesLayout, false);
+        boolean dishUpdated = false;
 
-        TextView nameTextView = dishLayout.findViewById(R.id.dish_name);
-        TextView weightTextView = dishLayout.findViewById(R.id.dish_weight);
-        TextView caloriesTextView = dishLayout.findViewById(R.id.dish_calories);
-        ImageButton deleteButton = dishLayout.findViewById(R.id.delete_button);
+        for (int i = 0; i < selectedDishesLayout.getChildCount(); i++) {
+            View view = selectedDishesLayout.getChildAt(i);
+            TextView nameTextView = view.findViewById(R.id.dish_name);
+            if (nameTextView != null && nameTextView.getText().toString().equals(meal.getName())) {
+                TextView weightTextView = view.findViewById(R.id.dish_weight);
+                TextView caloriesTextView = view.findViewById(R.id.dish_calories);
 
-        nameTextView.setText(meal.getName());
-        weightTextView.setText(meal.getWeight() + " г");
-        caloriesTextView.setText(meal.getCalories() + " ккал");
+                weightTextView.setText(meal.getWeight() + " г");
+                caloriesTextView.setText(meal.getCalories() + " ккал");
 
-        deleteButton.setOnClickListener(v -> {
-            selectedDishes.remove(meal);
-            selectedDishesLayout.removeView(dishLayout);
-        });
+                for (MealModel selectedMeal : selectedDishes) {
+                    if (selectedMeal.getName().equals(meal.getName())) {
+                        selectedMeal.setWeight(meal.getWeight());
+                        selectedMeal.setCalories(meal.getCalories());
+                        selectedMeal.setProtein(meal.getProtein());
+                        selectedMeal.setFats(meal.getFats());
+                        selectedMeal.setCarbohydrates(meal.getCarbohydrates());
+                        dishUpdated = true;
+                        break;
+                    }
+                }
+                if (dishUpdated) break;
+            }
+        }
 
-        selectedDishes.add(meal);
-        selectedDishesLayout.addView(dishLayout);
+        if (!dishUpdated) {
+            ConstraintLayout dishLayout = (ConstraintLayout) inflater.inflate(R.layout.selected_dish_change_layout, selectedDishesLayout, false);
+
+            TextView nameTextView = dishLayout.findViewById(R.id.dish_name);
+            TextView weightTextView = dishLayout.findViewById(R.id.dish_weight);
+            TextView caloriesTextView = dishLayout.findViewById(R.id.dish_calories);
+            ImageButton deleteButton = dishLayout.findViewById(R.id.delete_button);
+
+            nameTextView.setText(meal.getName());
+            weightTextView.setText(meal.getWeight() + " г");
+            caloriesTextView.setText(meal.getCalories() + " ккал");
+
+            deleteButton.setOnClickListener(v -> {
+                selectedDishes.remove(meal);
+                selectedDishesLayout.removeView(dishLayout);
+            });
+
+            selectedDishes.add(meal);
+            selectedDishesLayout.addView(dishLayout);
+
+            dishLayout.setOnClickListener(v -> showChangeWeightDialog(meal));
+        }
     }
 
     private void setupSearchBar() {

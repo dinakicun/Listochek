@@ -81,13 +81,13 @@
             android:id="@+id/button"
             android:layout_width="200dp"
             android:layout_height="47dp"
-            android:text="Готово"
-            app:backgroundTint="#B1E996"
             android:layout_gravity="center"
+            android:layout_margin="30dp"
             android:background="@drawable/button_corner"
-            app:cornerRadius="15dp"
+            android:text="Готово"
             android:textSize="18dp"
-            android:layout_margin="30dp"/>
+            app:backgroundTint="#B1E996"
+            app:cornerRadius="15dp" />
 
         <TextView
             android:id="@+id/toRegistrationText"

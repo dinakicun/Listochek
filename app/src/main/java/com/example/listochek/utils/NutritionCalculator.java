@@ -75,8 +75,12 @@ public class NutritionCalculator {
                                 List<Map<String, Object>> meals = (List<Map<String, Object>>) entry.getValue();
                                 for (Map<String, Object> mealData : meals) {
                                     String mealId = (String) mealData.get("mealId");
+                                    Double factor = (Double) mealData.get("factor");
+                                    if (factor == null) {
+                                        factor = 1.0; // Если factor отсутствует, инициализируем его значением 1.0
+                                    }
                                     if (mealId != null) {
-                                        fetchMealData(db, userId, mealId, callback);
+                                        fetchMealData(db, userId, mealId, callback, factor);
                                     }
                                 }
                             }
@@ -90,12 +94,14 @@ public class NutritionCalculator {
                 .addOnFailureListener(e -> callback.run());
     }
 
-    private static void fetchMealData(FirebaseFirestore db, String userId, String mealId, Runnable callback) {
+
+
+    private static void fetchMealData(FirebaseFirestore db, String userId, String mealId, Runnable callback, double factor) {
         db.collection("meal").document(mealId).get().addOnSuccessListener(mealSnapshot -> {
             if (mealSnapshot.exists()) {
                 MealModel meal = mealSnapshot.toObject(MealModel.class);
                 if (meal != null) {
-                    updateTotals(meal);
+                    updateTotals(meal, factor);
                 }
                 callback.run();
             } else {
@@ -103,7 +109,7 @@ public class NutritionCalculator {
                     if (userMealSnapshot.exists()) {
                         MealModel meal = userMealSnapshot.toObject(MealModel.class);
                         if (meal != null) {
-                            updateTotals(meal);
+                            updateTotals(meal, factor);
                         }
                     }
                     callback.run();
@@ -111,6 +117,15 @@ public class NutritionCalculator {
             }
         }).addOnFailureListener(e -> callback.run());
     }
+
+
+    private static void updateTotals(MealModel meal, double factor) {
+        totalCalories += meal.getCalories() * factor;
+        totalProtein += meal.getProtein() * factor;
+        totalCarbohydrates += meal.getCarbohydrates() * factor;
+        totalFats += meal.getFats() * factor;
+    }
+
 
     private static void updateTotals(MealModel meal) {
         totalCalories += meal.getCalories() != null ? meal.getCalories() : 0;

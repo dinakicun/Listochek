@@ -3,7 +3,6 @@ package com.example.listochek;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,9 +26,8 @@ public class MealDetailsActivity extends AppCompatActivity {
     private RecyclerView mealRecyclerView;
     private MealConsumptionRecyclerAdapter adapter;
     private String mealType;
-    private List<String> allMealIds = new ArrayList<>();
     private List<MealModel> allMeals = new ArrayList<>();
-    private Map<String, Integer> mealIdCounts = new HashMap<>();
+    private Map<String, Double> mealFactors = new HashMap<>();
     private TextView typeOfDishText;
     private ImageButton backBtn;
     private ImageButton addMealBtn;
@@ -68,72 +66,74 @@ public class MealDetailsActivity extends AppCompatActivity {
                     if (documentSnapshot.exists() && documentSnapshot.contains(mealType)) {
                         List<Map<String, Object>> mealsList = (List<Map<String, Object>>) documentSnapshot.get(mealType);
                         for (Map<String, Object> meal : mealsList) {
+                            String id = (String) meal.get("id");
                             String mealId = (String) meal.get("mealId");
-                            int count = meal.containsKey("count") ? ((Long) meal.get("count")).intValue() : 1;
-                            mealIdCounts.put(mealId, mealIdCounts.getOrDefault(mealId, 0) + count);
+                            double factor = meal.containsKey("factor") ? ((Double) meal.get("factor")) : 1.0;
+                            mealFactors.put(id, factor);
+                            fetchMealFromCollections(mealId, factor);
                         }
-                        Log.d(TAG, "Fetched mealConsumption meal IDs: " + mealIdCounts);
+                        Log.d(TAG, "Fetched mealConsumption meal IDs: " + mealFactors.keySet());
                     } else {
                         Log.d(TAG, "No mealConsumption data found for mealType: " + mealType);
                     }
-                    fetchMealsFromBothCollections(userId);
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Error fetching mealConsumption data", e));
     }
 
-    private void fetchMealsFromBothCollections(String userId) {
-        if (mealIdCounts.isEmpty()) {
-            Log.d(TAG, "No meal IDs to fetch meals for");
-            return;
-        }
-
+    private void fetchMealFromCollections(String mealId, double factor) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        List<String> mealIds = new ArrayList<>(mealIdCounts.keySet());
 
-        // Fetch meals from "meal" collection
-        db.collection("meal").whereIn("id", mealIds).get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    Map<String, MealModel> fetchedMeals = new HashMap<>();
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+        // Fetch meal from "meal" collection
+        db.collection("meal").document(mealId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
                         MealModel meal = documentSnapshot.toObject(MealModel.class);
-                        fetchedMeals.put(documentSnapshot.getId(), meal);
+                        if (meal != null) {
+                            allMeals.add(applyFactorToMeal(meal, factor));
+                            setupAdapter();
+                        }
+                    } else {
+                        fetchUserMealFromCollection(mealId, factor);
                     }
-                    addMealsToAllMeals(fetchedMeals);
-                    Log.d(TAG, "Fetched meals from 'meal' collection: " + allMeals.size());
-                    fetchUserMeals(userId, mealIds);
                 })
-                .addOnFailureListener(e -> Log.e(TAG, "Error fetching meals from 'meal' collection", e));
+                .addOnFailureListener(e -> Log.e(TAG, "Error fetching meal from 'meal' collection", e));
     }
 
-    private void fetchUserMeals(String userId, List<String> mealIds) {
+    private void fetchUserMealFromCollection(String mealId, double factor) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseUtil.currentUserId();
+
+        // Fetch meal from "usersMeal" collection
         db.collection("meal")
                 .document("usersMeal")
                 .collection(userId)
-                .whereIn("id", mealIds)
+                .document(mealId)
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    Map<String, MealModel> fetchedMeals = new HashMap<>();
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
                         MealModel meal = documentSnapshot.toObject(MealModel.class);
-                        fetchedMeals.put(documentSnapshot.getId(), meal);
+                        if (meal != null) {
+                            allMeals.add(applyFactorToMeal(meal, factor));
+                            setupAdapter();
+                        }
+                    } else {
+                        Log.d(TAG, "Meal not found for mealId: " + mealId);
                     }
-                    addMealsToAllMeals(fetchedMeals);
-                    Log.d(TAG, "Fetched meals from 'usersMeal' collection: " + allMeals.size());
-                    setupAdapter();
                 })
-                .addOnFailureListener(e -> Log.e(TAG, "Error fetching meals from 'usersMeal' collection", e));
+                .addOnFailureListener(e -> Log.e(TAG, "Error fetching meal from 'usersMeal' collection", e));
     }
 
-    private void addMealsToAllMeals(Map<String, MealModel> fetchedMeals) {
-        for (Map.Entry<String, MealModel> entry : fetchedMeals.entrySet()) {
-            String mealId = entry.getKey();
-            MealModel meal = entry.getValue();
-            int count = mealIdCounts.get(mealId);
-            for (int i = 0; i < count; i++) {
-                allMeals.add(meal);
-            }
-        }
+    private MealModel applyFactorToMeal(MealModel meal, double factor) {
+        MealModel mealWithFactor = new MealModel();
+        mealWithFactor.setId(meal.getId());
+        mealWithFactor.setName(meal.getName());
+        mealWithFactor.setWeight((int) Math.round(meal.getWeight() * factor));
+        mealWithFactor.setCalories((int) Math.round(meal.getCalories() * factor));
+        mealWithFactor.setProtein((int) Math.round(meal.getProtein() * factor));
+        mealWithFactor.setFats((int) Math.round(meal.getFats() * factor));
+        mealWithFactor.setCarbohydrates((int) Math.round(meal.getCarbohydrates() * factor));
+        mealWithFactor.setFactor(factor);
+        return mealWithFactor;
     }
 
     public void removeMeal(MealModel meal) {
@@ -151,7 +151,7 @@ public class MealDetailsActivity extends AppCompatActivity {
                         List<Map<String, Object>> mealsList = (List<Map<String, Object>>) documentSnapshot.get(mealType);
                         Map<String, Object> mealToRemove = null;
                         for (Map<String, Object> mealItem : mealsList) {
-                            if (meal.getId().equals(mealItem.get("mealId"))) {
+                            if (meal.getId().equals(mealItem.get("mealId")) && meal.getFactor() == (Double) mealItem.get("factor")) {
                                 mealToRemove = mealItem;
                                 break;
                             }

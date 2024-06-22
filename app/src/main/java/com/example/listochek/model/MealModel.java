@@ -1,7 +1,6 @@
 package com.example.listochek.model;
 
 public class MealModel {
-
     private Integer Calories;
     private Integer Fats;
     private Integer Protein;
@@ -9,7 +8,8 @@ public class MealModel {
     private String Name;
     private Integer Weight;
     private String NameToLower;
-    private String id; // новое поле для хранения идентификатора документа
+    private String id;
+    private double factor = 1.0; // инициализация по умолчанию
 
     public MealModel() {
     }
@@ -23,8 +23,16 @@ public class MealModel {
         this.Weight = Weight;
         this.NameToLower = NameToLower;
         this.id = id;
+        this.factor = 1.0; // инициализация по умолчанию
     }
 
+    public double getFactor() {
+        return factor;
+    }
+
+    public void setFactor(double factor) {
+        this.factor = factor;
+    }
     public Integer getCalories() {
         return Calories;
     }
