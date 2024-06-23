@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.listochek.model.WaterIntakeModel;
@@ -91,8 +92,25 @@ public class WaterFragment extends Fragment {
                 view.findViewById(R.id.addWaterBtn7),
                 view.findViewById(R.id.addWaterBtn8),
                 view.findViewById(R.id.addWaterBtn9),
-                view.findViewById(R.id.addWaterBtn10)
+                view.findViewById(R.id.addWaterBtn10),
+                view.findViewById(R.id.addWaterBtn11),
+                view.findViewById(R.id.addWaterBtn12),
+                view.findViewById(R.id.addWaterBtn13),
+                view.findViewById(R.id.addWaterBtn14),
+                view.findViewById(R.id.addWaterBtn15)
         };
+
+        LinearLayout glassesThirdStroke = view.findViewById(R.id.glassesThirdStroke);
+
+        viewModel.getWaterGoal().observe(getViewLifecycleOwner(), waterGoalLiters -> {
+            if (waterGoalLiters != null) {
+                if (waterGoalLiters > 2.5) {
+                    glassesThirdStroke.setVisibility(View.VISIBLE);
+                } else {
+                    glassesThirdStroke.setVisibility(View.GONE);
+                }
+            }
+        });
 
         viewModel.getGlassesOfWater().observe(getViewLifecycleOwner(), glasses -> {
             for (int i = 0; i < buttons.length; i++) {
@@ -121,6 +139,9 @@ public class WaterFragment extends Fragment {
             });
         }
     }
+
+
+
 
     private void updateWaterIntake(double volumeChange) {
         CombinedWaterViewModel viewModel = new ViewModelProvider(requireActivity()).get(CombinedWaterViewModel.class);

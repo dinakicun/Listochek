@@ -106,7 +106,7 @@ public class HomePage extends AppCompatActivity {
             }
         });
 
-        bottomNavigationView.setSelectedItemId(R.id.menu_home);
+        bottomNavigationView.setSelectedItemId(R.id.menu_calories);
 
         userPointsViewModel.getWaterPoints().observe(this, waterPoints -> {
             if (waterPoints != null) {

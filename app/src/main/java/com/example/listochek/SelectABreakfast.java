@@ -248,21 +248,21 @@ public class SelectABreakfast extends AppCompatActivity {
     }
 
     private void setupSearchBar() {
-        EditText searchBar = findViewById(R.id.searchBarEditText);
-        searchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterMeals(s.toString().toLowerCase());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+//        EditText searchBar = findViewById(R.id.searchBarEditText);
+//        searchBar.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                filterMeals(s.toString().toLowerCase());
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//            }
+//        });
     }
 
     private void filterMeals(String text) {

@@ -9,265 +9,330 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/mainLL"
-        >
-
-    <TextView
-        android:id="@+id/todayView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Сегодня"
-        android:textSize="35sp"
-        android:layout_marginStart="10dp"
-        />
-
-    <TextView
-        android:id="@+id/goalView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ваша цель: 0 литра в день "
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:textSize="18sp"
-        android:layout_marginBottom="5dp"
-        />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/water_tracker_background"
-        android:id="@+id/trackerLL">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:id="@+id/firstStrokeLL"
+            android:orientation="vertical"
+            android:id="@+id/mainLL"
             >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/todayView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:id="@+id/leftCaloriesLL"
-                >
-
-                <TextView
-                        android:id="@+id/leftNumberOfWaterText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 л"
-                    android:layout_gravity="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    />
-
-                <TextView
-                    android:id="@+id/leftWaterText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Осталось"
-                    android:layout_gravity="center"
-                    android:textSize="15sp"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/placeholder"
-                android:orientation="vertical"
-                android:layout_width="100dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content">
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:id="@+id/finishedCaloriesLL"
-                >
-
-                <TextView
-                    android:id="@+id/finishedNumberOfWaterText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 л"
-                    android:layout_gravity="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    />
-                <TextView
-                    android:id="@+id/fineshedWaterText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Выпито"
-                    android:layout_gravity="center"
-                    android:textSize="15sp"
-                    />
-
-            </LinearLayout>
-        </LinearLayout>
-
-    </RelativeLayout>
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="230dp"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="100dp"
-            android:background="@drawable/water_tracker_background"
-            android:id="@+id/addWaterLL">
+                android:text="Сегодня"
+                android:textSize="35sp"
+                android:layout_marginStart="10dp"
+                />
 
             <TextView
+                android:id="@+id/goalView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Добавьте воды:"
+                android:text="Ваша цель: 0 литра в день "
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
                 android:textSize="18sp"
-                android:textAlignment="textStart"
-                android:layout_margin="20dp">
-            </TextView>
+                android:layout_marginBottom="5dp"
+                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/water_tracker_background"
+                android:id="@+id/trackerLL">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal"
+                    android:id="@+id/firstStrokeLL"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:id="@+id/leftCaloriesLL"
+                        >
+
+                        <TextView
+                            android:id="@+id/leftNumberOfWaterText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 л"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            />
+
+                        <TextView
+                            android:id="@+id/leftWaterText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Осталось"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/placeholder"
+                        android:orientation="vertical"
+                        android:layout_width="100dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:id="@+id/finishedCaloriesLL"
+                        >
+
+                        <TextView
+                            android:id="@+id/finishedNumberOfWaterText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 л"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/fineshedWaterText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Выпито"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/glassesFirstStroke"
-                >
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:paddingBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="100dp"
+                android:background="@drawable/water_tracker_background"
+                android:id="@+id/addWaterLL">
 
-                 <ImageButton
-                       android:id="@+id/addWaterBtn1"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:layout_weight="1"
-                       android:background="?attr/selectableItemBackgroundBorderless"
-                       android:src="@drawable/empty_glass"
-                       android:layout_marginRight="20dp"
-                       android:layout_marginLeft="20dp">
-                 </ImageButton>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Добавьте воды:"
+                    android:textSize="18sp"
+                    android:textAlignment="textStart"
+                    android:layout_margin="20dp">
+                </TextView>
 
-                <ImageButton
-                    android:id="@+id/addWaterBtn2"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/empty_glass"
-                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/glassesFirstStroke"
                     >
-                </ImageButton>
 
-                <ImageButton
-                    android:id="@+id/addWaterBtn3"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/empty_glass"
-                    android:layout_marginRight="20dp"
-                    >
-                </ImageButton>
+                    <ImageButton
+                        android:id="@+id/addWaterBtn1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp">
+                    </ImageButton>
 
-                <ImageButton
-                    android:id="@+id/addWaterBtn4"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/empty_glass"
-                    android:layout_marginRight="20dp"
-                    >
-                </ImageButton>
-                <ImageButton
-                    android:id="@+id/addWaterBtn5"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/empty_glass"
-                    android:layout_marginRight="20dp"
-                    >
-                </ImageButton>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/glassesSecondStroke"
-                android:layout_marginTop="40dp"
-                >
+                    <ImageButton
+                        android:id="@+id/addWaterBtn2"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
 
-                <ImageButton
-                    android:id="@+id/addWaterBtn6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/empty_glass"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp">
-                </ImageButton>
+                    <ImageButton
+                        android:id="@+id/addWaterBtn3"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
 
-                <ImageButton
-                    android:id="@+id/addWaterBtn7"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                    <ImageButton
+                        android:id="@+id/addWaterBtn4"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+                    <ImageButton
+                        android:id="@+id/addWaterBtn5"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/empty_glass"
-                    android:layout_marginRight="20dp"
-                    >
-                </ImageButton>
+                    android:orientation="horizontal"
+                    android:id="@+id/glassesSecondStroke"
+                    android:layout_marginTop="40dp"
 
-                <ImageButton
-                    android:id="@+id/addWaterBtn8"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/empty_glass"
-                    android:layout_marginRight="20dp"
                     >
-                </ImageButton>
 
-                <ImageButton
-                    android:id="@+id/addWaterBtn9"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                    <ImageButton
+                        android:id="@+id/addWaterBtn6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp">
+                    </ImageButton>
+
+                    <ImageButton
+                        android:id="@+id/addWaterBtn7"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+
+                    <ImageButton
+                        android:id="@+id/addWaterBtn8"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+
+                    <ImageButton
+                        android:id="@+id/addWaterBtn9"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+                    <ImageButton
+                        android:id="@+id/addWaterBtn10"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/empty_glass"
-                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/glassesThirdStroke"
+                    android:layout_marginTop="40dp"
+                    android:visibility="gone"
                     >
-                </ImageButton>
-                <ImageButton
-                    android:id="@+id/addWaterBtn10"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/empty_glass"
-                    android:layout_marginRight="20dp"
-                    >
-                </ImageButton>
+
+                    <ImageButton
+                        android:id="@+id/addWaterBtn11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp">
+                    </ImageButton>
+
+                    <ImageButton
+                        android:id="@+id/addWaterBtn12"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+
+                    <ImageButton
+                        android:id="@+id/addWaterBtn13"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+
+                    <ImageButton
+                        android:id="@+id/addWaterBtn14"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+                    <ImageButton
+                        android:id="@+id/addWaterBtn15"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/empty_glass"
+                        android:layout_marginRight="20dp"
+                        >
+                    </ImageButton>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
     </ScrollView>
 </FrameLayout>

@@ -61,18 +61,18 @@
             android:id="@+id/toolbar"
             android:layout_marginBottom="20dp">
 
-            <EditText
-                android:id="@+id/searchBarEditText"
-                android:layout_width="320dp"
-                android:layout_height="55dp"
-                android:background="@drawable/edittext_background"
-                android:hint="Поиск блюда"
-                android:padding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+<!--            <EditText-->
+<!--                android:id="@+id/searchBarEditText"-->
+<!--                android:layout_width="320dp"-->
+<!--                android:layout_height="55dp"-->
+<!--                android:background="@drawable/edittext_background"-->
+<!--                android:hint="Поиск блюда"-->
+<!--                android:padding="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
 
-            </EditText>
+<!--            </EditText>-->
         </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
             android:id="@+id/selectedDishesLayout"
