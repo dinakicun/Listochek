@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.listochek.model.UserModel;
 import com.example.listochek.utils.FirebaseUtil;
@@ -28,6 +28,7 @@ public class Authorization1 extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private TextView toRegistration;
+    private TextView recoverTextView;
     private FirebaseAuth mAuth;
     UserModel userModel;
 
@@ -36,10 +37,11 @@ public class Authorization1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authorization1);
 
-        mAuth = FirebaseAuth.getInstance(); // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
         emailEditText = findViewById(R.id.editText);
         passwordEditText = findViewById(R.id.editText2);
         toRegistration = findViewById(R.id.toRegistrationText);
+        recoverTextView = findViewById(R.id.recoverThePassword);
 
         findViewById(R.id.button).setOnClickListener(v -> loginUser());
         toRegistration.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +49,13 @@ public class Authorization1 extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Authorization1.this, MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        recoverTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPasswordRecoveryDialog();
             }
         });
     }
@@ -82,7 +91,6 @@ public class Authorization1 extends AppCompatActivity {
         });
     }
 
-
     private void loginUser() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
@@ -106,4 +114,38 @@ public class Authorization1 extends AppCompatActivity {
         });
     }
 
+    private void showPasswordRecoveryDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Восстановление пароля");
+
+        final EditText input = new EditText(this);
+        input.setHint("Введите ваш email");
+        builder.setView(input);
+
+        builder.setPositiveButton("Отправить", (dialog, which) -> {
+            String email = input.getText().toString().trim();
+            if (email.isEmpty()) {
+                Toast.makeText(Authorization1.this, "Пожалуйста, введите email", Toast.LENGTH_SHORT).show();
+            } else {
+                sendPasswordResetEmail(email);
+            }
+        });
+
+        builder.setNegativeButton("Отмена", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private void sendPasswordResetEmail(String email) {
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(Authorization1.this, "Инструкция по восстановлению пароля отправлена на " + email, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Authorization1.this, "Ошибка отправки инструкции по восстановлению пароля: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
 }
